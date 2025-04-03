@@ -2,7 +2,11 @@
 Tool to convert several written and spoken language data formats into TEI<br>
 [LINK]()
 ## Description
-TEIWorLD transforms a variety of different formats for spoken and written language into the standardised formats TEISpoken and I5 with the intermediate format TEI P5. For archiving written data, the pipeline converts TEI P5 to the format used at IDS, the I5 format, which was developed by IDS based on TEI P5.
+TEIWorLD transforms a variety of different formats for spoken and written language into the standardised formats TEISpoken and I5 with the intermediate format TEI P5. For archiving written data, the pipeline converts TEI P5 to the format used at IDS, the I5 format, which was developed by IDS based on TEI P5.<br>
+<div align="center">
+  <img src="images/Grafik_UML.png" alt="Schematic representation of the components of TEIWorLD">
+</div>
+
 ### Components
 TEIGarage: [LINK](https://github.com/TEIC/TEIGarage)<br>
 TEICORPO: [LINK](https://github.com/christopheparisse/teicorpo)<br>
@@ -14,7 +18,7 @@ textgrid (Praat)<br>
 cha (chat/childes)<br>
 trs (transcriber)<br>
 maxqda (qdpx/mx24)<br>
-plain text<br>
+txt<br>
 docx/doc<br>
 #### Output
 ISO/TEI Transcriptions of Spoken Language (TEISpoken)<br>
