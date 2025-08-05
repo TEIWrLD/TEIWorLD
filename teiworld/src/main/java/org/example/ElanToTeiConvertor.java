@@ -1,0 +1,86 @@
+package org.example;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.util.Objects;
+
+public class ElanToTeiConvertor implements ConvertorInterface{
+
+    String inputFilePath;
+    String outputFilePath;
+    String jarPath;  // where to store JAR file of TEICorpo? Inside the java project structure?
+    // JARs must be stored in two places:
+    // C:\Users\Schwarz\Documents\Git\TEIWorLD\teiworld\target\classes and
+    // C:\Users\Schwarz\Documents\Git\TEIWorLD\teiworld\src\main\resources
+
+    public ElanToTeiConvertor(String jar, String inPath, String outPath) {
+        jarPath = jar;
+        inputFilePath = inPath;
+        outputFilePath = outPath;
+    }
+
+    @Override
+    public String getInputFilePath() {
+        return this.inputFilePath;
+    }
+
+    @Override
+    public String getOutputFilePath() {
+        return this.outputFilePath;
+    }
+
+    @Override
+    public String getExecutableFilePath() {
+        return this.jarPath;
+    }
+
+    @Override
+    public void convert() {
+        // see https://www.baeldung.com/java-execute-jar-file
+        Process process = null;
+
+        try {
+            String jarFile = new File(Objects.requireNonNull(getClass().getClassLoader()
+                            .getResource(this.jarPath))
+                    .toURI()).getAbsolutePath();
+
+            // JAR must be stored in two places:
+            // C:\Users\Schwarz\Documents\Git\TEIWorLD\teiworld\target\classes and
+            // C:\Users\Schwarz\Documents\Git\TEIWorLD\teiworld\src\main\resources
+            String jarFileCommonsIO = new File(Objects.requireNonNull(getClass().getClassLoader()
+                            .getResource("commons-io-2.19.0.jar"))
+                    .toURI()).getAbsolutePath();
+
+            // Command: java -cp teicorpo.jar;commons-io-2.19.0.jar fr.ortolang.teicorpo.ElanToTei  "inputfile.eaf" -o "path/output/directory/"
+            // command needs to be passed to process as a String array:
+            // { "java",
+            //   "-cp",
+            //   "C:\Users\Schwarz\Documents\Git\TEIWorLD\teiworld\target\classes\teicorpo.jar;C:\Users\Schwarz\Documents\Git\TEIWorLD\teiworld\target\classes\commons-io-2.19.0.jar",
+            //   "fr.ortolang.teicorpo.ElanToTei",
+            //   "C:\Users\Schwarz\Documents\Git\omniconverter\in\spokendata\01.10.07-10_Thambosha_Alemaniya.eaf",
+            //   "-o",
+            //   "C:\Users\Schwarz\Documents\Git\TEIWorLD\tmpoutput\" };
+            String[] command = { "java", "-cp", jarFile.toString() + ";" + jarFileCommonsIO.toString(),
+                    "fr.ortolang.teicorpo.ElanToTei", this.inputFilePath, "-o", this.outputFilePath };
+
+            ProcessBuilder processBuilder = new ProcessBuilder(command);
+            processBuilder.redirectErrorStream(true);
+
+            process = processBuilder.start();  // Start process
+            try (InputStream inputStream = process.getInputStream()) {
+                byte[] output = inputStream.readAllBytes();
+                System.out.println("Output: " + new String(output));
+            }
+            int exitCode = process.waitFor();
+
+        } catch (IOException | InterruptedException | URISyntaxException e) {
+        } finally {
+            if (process != null) {
+                process.destroy();  // Ensure cleanup in all Java versions
+            }
+        }
+
+    }
+}
