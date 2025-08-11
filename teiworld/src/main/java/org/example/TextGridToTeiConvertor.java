@@ -6,7 +6,7 @@ import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.util.Objects;
 
-public class ElanToTeiConvertor implements ConvertorInterface{
+public class TextGridToTeiConvertor implements ConvertorInterface {
 
     String inputFilePath;
     String outputFilePath;
@@ -15,11 +15,12 @@ public class ElanToTeiConvertor implements ConvertorInterface{
     // C:\Users\Schwarz\Documents\Git\TEIWorLD\teiworld\target\classes and
     // C:\Users\Schwarz\Documents\Git\TEIWorLD\teiworld\src\main\resources
 
-    public ElanToTeiConvertor(String jar, String inPath, String outPath) {
-        this.jarPath = jar;
+    public TextGridToTeiConvertor(String jar, String inPath, String outPath) {
         this.inputFilePath = inPath;
         this.outputFilePath = outPath;
+        this.jarPath = jar;
     }
+
 
     @Override
     public String getInputFilePath() {
@@ -38,6 +39,7 @@ public class ElanToTeiConvertor implements ConvertorInterface{
 
     @Override
     public void convert() {
+
         // see https://www.baeldung.com/java-execute-jar-file
         Process process = null;
 
@@ -53,17 +55,17 @@ public class ElanToTeiConvertor implements ConvertorInterface{
                             .getResource("commons-io-2.19.0.jar"))
                     .toURI()).getAbsolutePath();
 
-            // Command: java -cp teicorpo.jar;commons-io-2.19.0.jar fr.ortolang.teicorpo.ElanToTei  "inputfile.eaf" -o "path/output/directory/"
+            // Command: java -cp teicorpo.jar;commons-io-2.19.0.jar fr.ortolang.teicorpo.PraatToTei  "inputfile.TextGrid" -o "path/output/directory/"
             // command needs to be passed to process as a String array:
             // { "java",
             //   "-cp",
             //   "C:\Users\Schwarz\Documents\Git\TEIWorLD\teiworld\target\classes\teicorpo.jar;C:\Users\Schwarz\Documents\Git\TEIWorLD\teiworld\target\classes\commons-io-2.19.0.jar",
-            //   "fr.ortolang.teicorpo.ElanToTei",
-            //   "C:\Users\Schwarz\Documents\Git\omniconverter\in\spokendata\file.eaf",
+            //   "fr.ortolang.teicorpo.PraatToTei",
+            //   "C:\Users\Schwarz\Documents\Git\omniconverter\in\spokendata\file.TextGrid",
             //   "-o",
             //   "C:\Users\Schwarz\Documents\Git\TEIWorLD\tmpoutput\" };
             String[] command = { "java", "-cp", jarFile.toString() + ";" + jarFileCommonsIO.toString(),
-                    "fr.ortolang.teicorpo.ElanToTei", this.inputFilePath, "-o", this.outputFilePath };
+                    "fr.ortolang.teicorpo.PraatToTei", this.inputFilePath, "-o", this.outputFilePath };
 
             ProcessBuilder processBuilder = new ProcessBuilder(command);
             processBuilder.redirectErrorStream(true);

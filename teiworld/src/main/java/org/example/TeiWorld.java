@@ -202,25 +202,40 @@ public class TeiWorld {
         // interface has: attribute inputFilePath, attribute outputFilePath, method convert, method getInputFilePath, method getOutputFilePath
         // see https://www.baeldung.com/java-execute-jar-file
 
-        // [1] ElanToTeiConvertor:
+        // [1-3] All conversions with TeiCorpo: ElanToTeiConvertor, ClanToTeiConvertor, TranscriberToTei:
         // Test the method converting with TeiCorpo - jar file , JAR files must be stored in two places:
         // C:\Users\Schwarz\Documents\Git\TEIWorLD\teiworld\target\classes and
         // C:\Users\Schwarz\Documents\Git\TEIWorLD\teiworld\src\main\resources
-        String jar = "teicorpo.jar";
-        String out= "C:\\Users\\Schwarz\\Documents\\Git\\TEIWorLD\\tmpoutput\\"; // TO DO change dir name to tmpOutput
+        String jarTeicorpo = "teicorpo.jar";
+        String out= "C:\\Users\\Schwarz\\Documents\\Git\\TEIWorLD\\tmpoutput\\";
 
-        //String in = fileList[0].getAbsoluteFile().toString();  // TO DO: replace with for each
+
         for (int i = 0; i < fileList.length; i++){
-            // Conversion of .eaf files with teicorpo
+            // [1] Conversion of .eaf files with teicorpo
             if (fileList[i].getName().endsWith(".eaf")){
                 String in = fileList[i].getAbsoluteFile().toString();
-                ElanToTeiConvertor ElanToTeiConv = new ElanToTeiConvertor(jar, in, out);
-                ElanToTeiConv.convert();
+                ElanToTeiConvertor elanToTeiConv = new ElanToTeiConvertor(jarTeicorpo, in, out);
+                elanToTeiConv.convert();
+            }
+            // [2] Conversion of .cha files with teicorpo
+            if (fileList[i].getName().endsWith(".cha")){
+                String in = fileList[i].getAbsoluteFile().toString();
+                ClanToTeiConvertor clanToTeiConv = new ClanToTeiConvertor(jarTeicorpo, in, out);
+                clanToTeiConv.convert();
+            }
+            // [3] Conversion of .trs files with teicorpo
+            if (fileList[i].getName().endsWith(".trs")){
+                String in = fileList[i].getAbsoluteFile().toString();
+                TrsToTeiConvertor trsToTeiConv = new TrsToTeiConvertor(jarTeicorpo, in, out);
+                trsToTeiConv.convert();
+            }
+            // [4] Conversion of .TextGrid praat files with teicorpo
+            if (fileList[i].getName().endsWith(".TextGrid")){
+                String in = fileList[i].getAbsoluteFile().toString();
+                TextGridToTeiConvertor textGridToTeiConv = new TextGridToTeiConvertor(jarTeicorpo, in, out);
+                textGridToTeiConv.convert();
             }
         }
-
-        //ElanToTeiConvertor ElanToTeiConv = new ElanToTeiConvertor(jar, in, out);
-        //ElanToTeiConv.convert();
 
         // TO DO: Execute Conversion for written: call respective class and save each converted file into output directory
         // Then call the code p52i5 to create a single written I5 file (IDS corpus) from the individually converted files
