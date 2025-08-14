@@ -31,7 +31,6 @@ public class TrsToTeiConvertor implements ConvertorInterface {
         return this.outputFilePath;
     }
 
-    @Override
     public String getExecutableFilePath() {
         return this.jarPath;
     }

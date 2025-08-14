@@ -211,6 +211,8 @@ public class TeiWorld {
 
 
         for (int i = 0; i < fileList.length; i++){
+
+            // ------------- SPOKEN FORMATS: ----------------------
             // [1] Conversion of .eaf files with teicorpo
             if (fileList[i].getName().endsWith(".eaf")){
                 String in = fileList[i].getAbsoluteFile().toString();
@@ -235,12 +237,21 @@ public class TeiWorld {
                 TextGridToTeiConvertor textGridToTeiConv = new TextGridToTeiConvertor(jarTeicorpo, in, out);
                 textGridToTeiConv.convert();
             }
+
+            // ------------- WRITTEN FORMATS: ----------------------
+            // [5] Conversion of .txt files with TEIgarage
+            if (fileList[i].getName().endsWith(".txt")){
+                String in = fileList[i].getAbsoluteFile().toString();
+                TxtToTeiConvertor txtToTeiConvertor = new TxtToTeiConvertor(in, out);
+                txtToTeiConvertor.convert();
+            }
+
+
         }
 
         // TO DO: Execute Conversion for written: call respective class and save each converted file into output directory
         // Then call the code p52i5 to create a single written I5 file (IDS corpus) from the individually converted files
 
-        // TO DO: Execute Conversion for spoken: call respective class and save each converted file into output directory
 
     }
 }
