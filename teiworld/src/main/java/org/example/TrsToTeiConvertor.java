@@ -37,7 +37,6 @@ public class TrsToTeiConvertor implements ConvertorInterface {
 
     @Override
     public void convert() {
-
         // see https://www.baeldung.com/java-execute-jar-file
         Process process = null;
 
@@ -69,13 +68,19 @@ public class TrsToTeiConvertor implements ConvertorInterface {
             processBuilder.redirectErrorStream(true);
 
             process = processBuilder.start();  // Start process
+
             try (InputStream inputStream = process.getInputStream()) {
                 byte[] output = inputStream.readAllBytes();
                 System.out.println("Output: " + new String(output));
+            } catch (IOException e) {
+                System.err.println("Error handling process: " + e.getMessage());
             }
-            int exitCode = process.waitFor();
+            //int exitCode = process.waitFor();
 
-        } catch (IOException | InterruptedException | URISyntaxException e) {
+        } catch (URISyntaxException e) {
+            System.err.println("Error with URI syntax of jar files: " + e.getMessage());
+        } catch (IOException e) {
+            System.err.println("Error starting process: " + e.getMessage());
         } finally {
             if (process != null) {
                 process.destroy();  // Ensure cleanup in all Java versions

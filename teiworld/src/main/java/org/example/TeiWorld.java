@@ -246,6 +246,15 @@ public class TeiWorld {
                 txtToTeiConvertor.convert();
             }
 
+            // TO DO: [6] Conversion of .docx files with TEIgarage
+            if (fileList[i].getName().endsWith(".docx")){
+                String in = fileList[i].getAbsoluteFile().toString();
+                DocxToTeiConvertor docxToTeiConvertor = new DocxToTeiConvertor(in, out);
+                docxToTeiConvertor.convert();
+            }
+
+            // TO DO: [7] Conversion of .qdpx files with TEIgarage
+
 
         }
 
