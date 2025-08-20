@@ -12,7 +12,7 @@ public class DocxToTeiConvertor implements ConvertorInterface{
     String inputFilePath;
     String outputFilePath;
     String urlForTxtConversion = "https://teigarage.tei-c.org/ege-webservice/Conversions/docx%3Aapplication%3Avnd.openxmlformats-officedocument.wordprocessingml.document/TEI%3Atext%3Axml/";
-    Path tempOutputFilePath; // In Windows the directory for temporary files is by default: C:\Users\User\AppData\Local\Temp
+    Path tempOutputFilePath; // In Windows the directory for temporary files is by default: C:\Users\User\AppData\Local\Temp, in Linux and macOS: /tmp
 
     public DocxToTeiConvertor(String inPath, String outPath){
         this.inputFilePath = inPath;

@@ -212,54 +212,55 @@ public class TeiWorld {
 
         for (int i = 0; i < fileList.length; i++){
 
-            // ------------- SPOKEN FORMATS: ----------------------
-            // [1] Conversion of .eaf files with teicorpo
+            // ------------- S: SPOKEN FORMATS: ----------------------
+            // [S1] Conversion of .eaf files with teicorpo
             if (fileList[i].getName().endsWith(".eaf")){
                 String in = fileList[i].getAbsoluteFile().toString();
                 ElanToTeiConvertor elanToTeiConv = new ElanToTeiConvertor(jarTeicorpo, in, out);
                 elanToTeiConv.convert();
             }
-            // [2] Conversion of .cha files with teicorpo
+            // [S2] Conversion of .cha files with teicorpo
             if (fileList[i].getName().endsWith(".cha")){
                 String in = fileList[i].getAbsoluteFile().toString();
                 ClanToTeiConvertor clanToTeiConv = new ClanToTeiConvertor(jarTeicorpo, in, out);
                 clanToTeiConv.convert();
             }
-            // [3] Conversion of .trs files with teicorpo
+            // [S3] Conversion of .trs files with teicorpo
             if (fileList[i].getName().endsWith(".trs")){
                 String in = fileList[i].getAbsoluteFile().toString();
                 TrsToTeiConvertor trsToTeiConv = new TrsToTeiConvertor(jarTeicorpo, in, out);
                 trsToTeiConv.convert();
             }
-            // [4] Conversion of .TextGrid praat files with teicorpo
+            // [S4] Conversion of .TextGrid praat files with teicorpo
             if (fileList[i].getName().endsWith(".TextGrid")){
                 String in = fileList[i].getAbsoluteFile().toString();
                 TextGridToTeiConvertor textGridToTeiConv = new TextGridToTeiConvertor(jarTeicorpo, in, out);
                 textGridToTeiConv.convert();
             }
+            // [S5] Conversion of .qdpx files with teicorpo -----------CONTINUE HERE: class QdpxToTeiConvertor !!!!!!!!!!!!!!!!!!!!
+            if (fileList[i].getName().endsWith(".qdpx")){
+                String in = fileList[i].getAbsoluteFile().toString();
+                QdpxToTeiConvertor qdpxToTeiConvertor = new QdpxToTeiConvertor(jarTeicorpo, in, out);
+                qdpxToTeiConvertor.convert();
+            }
 
-            // ------------- WRITTEN FORMATS: ----------------------
-            // [5] Conversion of .txt files with TEIgarage
+            // ------------- W: WRITTEN FORMATS: ----------------------
+            // [W1] Conversion of .txt files with TEIgarage
             if (fileList[i].getName().endsWith(".txt")){
                 String in = fileList[i].getAbsoluteFile().toString();
                 TxtToTeiConvertor txtToTeiConvertor = new TxtToTeiConvertor(in, out);
                 txtToTeiConvertor.convert();
             }
-
-            // TO DO: [6] Conversion of .docx files with TEIgarage
+            // [W2] Conversion of .docx files with TEIgarage
             if (fileList[i].getName().endsWith(".docx")){
                 String in = fileList[i].getAbsoluteFile().toString();
                 DocxToTeiConvertor docxToTeiConvertor = new DocxToTeiConvertor(in, out);
                 docxToTeiConvertor.convert();
             }
-
-            // TO DO: [7] Conversion of .qdpx files with TEIgarage
-
-
         }
 
         // TO DO: Execute Conversion for written: call respective class and save each converted file into output directory
-        // Then call the code p52i5 to create a single written I5 file (IDS corpus) from the individually converted files
+        // TO DO: Then call the code p52i5 to create a single written I5 file (IDS corpus) from the individually converted files
 
 
     }

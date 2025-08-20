@@ -16,7 +16,7 @@ public class TxtToTeiConvertor implements ConvertorInterface {
     String inputFilePath;
     String outputFilePath;
     String urlForTxtConversion = "https://teigarage.tei-c.org/ege-webservice/Conversions/txt%3Atext%3Aplain/odt%3Aapplication%3Avnd.oasis.opendocument.text/TEI%3Atext%3Axml";
-    Path tempOutputFilePath; // In Windows the directory for temporary files is by default: C:\Users\User\AppData\Local\Temp
+    Path tempOutputFilePath; // In Windows the directory for temporary files is by default: C:\Users\User\AppData\Local\Temp, in Linux and macOS: /tmp
 
     public TxtToTeiConvertor(String inPath, String outPath) {
         this.inputFilePath = inPath;

@@ -12,8 +12,8 @@ public class ClanToTeiConvertor implements ConvertorInterface{
     String outputFilePath;
     String jarPath;  // where to store JAR file of TEICorpo? Inside the java project structure?
     // JARs must be stored in two places:
-    // C:\Users\Schwarz\Documents\Git\TEIWorLD\teiworld\target\classes and
-    // C:\Users\Schwarz\Documents\Git\TEIWorLD\teiworld\src\main\resources
+    // TEIWorLD\teiworld\target\classes and
+    // TEIWorLD\teiworld\src\main\resources
 
     public ClanToTeiConvertor(String jar, String inPath, String outPath) {
         this.jarPath = jar;
@@ -46,8 +46,8 @@ public class ClanToTeiConvertor implements ConvertorInterface{
                     .toURI()).getAbsolutePath();
 
             // JAR must be stored in two places:
-            // C:\Users\Schwarz\Documents\Git\TEIWorLD\teiworld\target\classes and
-            // C:\Users\Schwarz\Documents\Git\TEIWorLD\teiworld\src\main\resources
+            // TEIWorLD\teiworld\target\classes and
+            // TEIWorLD\teiworld\src\main\resources
             String jarFileCommonsIO = new File(Objects.requireNonNull(getClass().getClassLoader()
                             .getResource("commons-io-2.19.0.jar"))
                     .toURI()).getAbsolutePath();
@@ -75,7 +75,6 @@ public class ClanToTeiConvertor implements ConvertorInterface{
             } catch (IOException e) {
                 System.err.println("Error handling process: " + e.getMessage());
             }
-            //int exitCode = process.waitFor();
 
         } catch (URISyntaxException e) {
             System.err.println("Error with URI syntax of jar files: " + e.getMessage());
