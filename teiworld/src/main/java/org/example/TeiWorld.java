@@ -54,7 +54,7 @@ public class TeiWorld {
 
     /**
      * Checks if the command line arguments are complete and correct.
-     * The first argument hast to be either "spoken" or "written",
+     * The first argument hast to be either "spoken" or "written" or "writtenP5",
      * the second and third arguments are the input and output directory (check for existence)
      *
      * @param CliArguments String array with the command line arguments
@@ -65,11 +65,22 @@ public class TeiWorld {
         boolean inputExists = false;
         boolean outputExists = false;
 
+        if (CliArguments[0].equalsIgnoreCase("h") || CliArguments[0].equalsIgnoreCase("-h")
+                || CliArguments[0].equalsIgnoreCase("--h") || CliArguments[0].equalsIgnoreCase("help")
+                || CliArguments[0].equalsIgnoreCase("-help") || CliArguments[0].equalsIgnoreCase("--help")) {
+            System.out.println("usage: java -jar org.example.TeiWorld.jar [<mode>] [<path to input directory>] [<path to output directory>]");
+            System.out.println("   mode     'spoken' - converts to TEIspoken and keeps files separate if there is more than one in the input directory");
+            System.out.println("            'written' - converts to TEI I5 and combines files to a single corpus in case there is more than one in the input dir");
+            System.out.println("            'writtenP5' - converts to TEI I5 and keeps files separate if there is more than one in the input directory");
+            System.exit(0);
+        }
+
+        // too many/few arguments
         if (CliArguments.length != 3){
             return false;
         }
 
-        if (CliArguments[0].equals("spoken") || CliArguments[0].equals("written")) {
+        if (CliArguments[0].equals("spoken") || CliArguments[0].equals("written") || CliArguments[0].equalsIgnoreCase("writtenP5")) {
             mode = true;
         }
 
@@ -88,12 +99,11 @@ public class TeiWorld {
 
     /**
      * getFilesToConvert gets all relevant files for a conversion process filtered by mode
-     * @param directory directory containing files to convert
      * @param mode the mode to filter the files for (spoken or written)
      * @return an array of file names with all files to be converted or null if the specified directory is empty
      *          or does not contain files of the specified mode
      */
-    public File[] getFilesToConvert(String directory, String mode) {
+    public File[] getFilesToConvert(String mode) {
         File folder = new File(inputDir);
 
         // file filter to sort File array for only spoken formats
@@ -128,7 +138,7 @@ public class TeiWorld {
             }
             return files;
 
-        } else if (mode.equals("written")) {
+        } else if (mode.equals("written") || mode.equalsIgnoreCase("writtenP5")) {
             File[] files = folder.listFiles(writtenFilefilter);
             if (files.length == 0){
                 return null;
@@ -143,12 +153,15 @@ public class TeiWorld {
     // For running main class with CLI args: right click on org.example.TeiWorld.java > More Run/Debug > Modify Run Configuration
     public static void main(String[] args) {
 
-        // TO DO: add CLI help menu for: java -jar org.example.TeiWorld --help / -h
-
         // check if CLI args are correct and complete - if not: exit program
         boolean correctArgs = checkArgs(args);
         if (!correctArgs) {
-            System.out.println("Error with arguments, restart the converter with: java -jar org.example.TeiWorld.jar [\"spoken\" or \"written\"] [existing input directory path] [existing output directory path]");
+            System.out.print("Error with commad arguments! You entered: java -jar org.example.TeiWorld.jar ");
+            for (int i = 0; i < args.length; i++){
+                System.out.print(args[i] + " ");
+            }
+            System.out.println("\nRestart the tool with the correct args: java -jar org.example.TeiWorld.jar [\"spoken\" or \"written\" or \"writtenP5\"] " +
+                    "[existing input directory path] [existing output directory path]");
             System.exit(0);
         }
 
@@ -167,7 +180,7 @@ public class TeiWorld {
         */
 
         // Informing the user about the files that will be converted
-        File[] fileList = teiwrld.getFilesToConvert(teiwrld.inputDir, teiwrld.mode);
+        File[] fileList = teiwrld.getFilesToConvert(teiwrld.mode);
         if (fileList != null){
             System.out.println("Converting the following files to TEI:");
             for (int i = 0; i < fileList.length; i++) {
@@ -237,8 +250,14 @@ public class TeiWorld {
             }
         }
 
-        // TO DO: Then call the code p52i5 to create a single written I5 file (IDS corpus) from the individually converted files
-        
+
+
+        // TO DO:
+        // if the mode is written call the code p52i5 to create a single written I5 file (IDS corpus) from the individually converted files
+        if (teiwrld.mode.equalsIgnoreCase("written")) {
+            // TO DO!
+        }
+
 
     }
 }
