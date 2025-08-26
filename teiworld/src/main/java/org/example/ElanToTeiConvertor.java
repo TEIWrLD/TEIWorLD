@@ -69,6 +69,7 @@ public class ElanToTeiConvertor implements ConvertorInterface{
 
             process = processBuilder.start();  // Start process
 
+            // Output the executed conversion to command line for informing the user (could be omitted)
             try (InputStream inputStream = process.getInputStream()) {
                 byte[] output = inputStream.readAllBytes();
                 System.out.println("Output: " + new String(output));

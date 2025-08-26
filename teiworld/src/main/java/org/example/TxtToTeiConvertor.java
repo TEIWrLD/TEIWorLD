@@ -41,6 +41,7 @@ public class TxtToTeiConvertor implements ConvertorInterface {
 
     @Override
     public void convert() {
+
         Process process = null;
 
         // Create temporary file for saving the non-pretty-printed XML output returned from Teigarage Webservice
@@ -75,55 +76,16 @@ public class TxtToTeiConvertor implements ConvertorInterface {
         } catch (IOException | ParserConfigurationException | SAXException | TransformerException e) {
             System.err.println("Error pretty printing the XML result: " + e.getMessage());
         }
+
         //delete the temporary file as it is no longer needed
         try {
-            ConvertorUtils.deleteFile(tempOutputFilePath);
+            Files.delete(tempOutputFilePath);
         } catch (IOException e) {
             System.err.println("Error managing temporary file: " + e.getMessage());
         } finally {
             if (process != null) {
                 process.destroy();  // Ensure cleanup in all Java versions
             }
-        }
-    }
-
-
-    /**
-     * Pretty print the XML file after its conversion to TEI (TEIgarage prints output in a single line)
-     * @param tempXmlOutputFilePath the Path of the temporary file to be pretty printed
-     */
-    private void prettyPrintXML(Path tempXmlOutputFilePath) {
-        System.out.println("Going to pretty print this: " + tempXmlOutputFilePath);
-
-        try {
-            File tempXmlOutputFile = new File(tempXmlOutputFilePath.toString());
-            Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(tempXmlOutputFile);
-
-            TransformerFactory transformerFactory = TransformerFactory.newInstance();
-            transformerFactory.setAttribute("indent-number", 4);
-            Transformer transformer = transformerFactory.newTransformer();
-            transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-            transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
-            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-
-            Writer out = new StringWriter();
-            transformer.transform(new DOMSource(document), new StreamResult(out));
-
-            System.out.println("pretty printed string: ");
-            System.out.println(out.toString());
-
-            FileWriter fw = new FileWriter(this.outputFilePath);
-            fw.write(out.toString());
-            fw.close();
-        } catch (IOException | ParserConfigurationException | SAXException | TransformerException e) {
-            System.err.println("Error: " + e.getMessage());
-        }
-
-        try {
-            Files.delete(tempXmlOutputFilePath);
-            System.out.println("Temporary file deleted.");
-        } catch (IOException e) {
-            System.err.println("Error managing temporary file: " + e.getMessage());
         }
     }
 }

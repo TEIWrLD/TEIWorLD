@@ -2,16 +2,10 @@ package org.example;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang3.ArrayUtils;
 
 public class TeiWorld {
 
@@ -51,11 +45,11 @@ public class TeiWorld {
     }
 
     public String getInputDir(){
-        return inputDir;
+        return inputDir + "\\";
     }
 
     public String getOutputDir(){
-        return outputDir;
+        return outputDir + "\\";
     }
 
     /**
@@ -153,7 +147,6 @@ public class TeiWorld {
 
         // check if CLI args are correct and complete - if not: exit program
         boolean correctArgs = checkArgs(args);
-        System.out.println("Are args correct? " + correctArgs);
         if (!correctArgs) {
             System.out.println("Error with arguments, restart the converter with: java -jar org.example.TeiWorld.jar [\"spoken\" or \"written\"] [existing input directory path] [existing output directory path]");
             System.exit(0);
@@ -161,6 +154,7 @@ public class TeiWorld {
 
         TeiWorld teiwrld = new TeiWorld(args[0], args[1], args[2]);
 
+        /*
         System.out.println("teiwrld mode: " + teiwrld.getMode());
         System.out.println("teiwrld input dir: " + teiwrld.getInputDir());
         System.out.println("teiwrld output dir: " + teiwrld.getOutputDir());
@@ -170,16 +164,12 @@ public class TeiWorld {
         System.out.println("Mimetype mapping:");
         teiwrld.FORMATMIMETYPES.forEach((key, value) -> System.out.println(key + ": " + value));
         System.out.println("------");
+        */
 
-        // TO DO (write method returning boolean): for each mode (spoken and written) check if there are files to convert input directory and if files have one of the required formats
-        // if not, return false and display error similar to Line 48 and exit program
-        // spoken: .eaf .cha .trs .TextGrid .qdpx
-        // written: .docx .txt
-
-        // test getFilesToConvert method
+        // Informing the user about the files that will be converted
         File[] fileList = teiwrld.getFilesToConvert(teiwrld.inputDir, teiwrld.mode);
         if (fileList != null){
-            System.out.println("List of files after sorting out filtering with mode " + teiwrld.mode + ":");
+            System.out.println("Converting the following files to TEI:");
             for (int i = 0; i < fileList.length; i++) {
                 System.out.println("File: " + fileList[i].getAbsoluteFile());
             }
@@ -187,28 +177,16 @@ public class TeiWorld {
             System.out.println("No files found in input folder with the required file format. The following formats are possible:" +
                     "\nAllowed file formats for spoken: " + Arrays.toString(teiwrld.SPOKENFORMATS) + "\nAllowed formats for written: " +
                     Arrays.toString(teiwrld.WRITTENFORMATS));
+            System.exit(0);
         }
-
-
         System.out.println("------");
 
 
-        // DONE: check which mode the user wants and collect all relevant files in input folder -> method getFilesToConvert
-
-        // TO DO: Do the conversions for each file: Write separate class for each Format Conversion:
-        // -> write interface Convertor which the individual Convertor classes implement:
-        // SPOKEN: ElanToTeiConvertor, ClanToTeiConvertor, PraatToTeiConvertor, TranscriberToTeiConvertor, QdpxToTeiConvertor
-        // WRITTEN: DocxToTeiConvertor, TxtToTeiConvertor
-        // interface has: attribute inputFilePath, attribute outputFilePath, method convert, method getInputFilePath, method getOutputFilePath
-        // see https://www.baeldung.com/java-execute-jar-file
-
-        // [1-3] All conversions with TeiCorpo: ElanToTeiConvertor, ClanToTeiConvertor, TranscriberToTei:
+        // [S1-S5] All conversions with TeiCorpo: ElanToTeiConvertor, ClanToTeiConvertor, TranscriberToTeiConvertor, TextGridToTeiConvertor, QdpxToTeiConvertor:
         // Test the method converting with TeiCorpo - jar file , JAR files must be stored in two places:
         // C:\Users\Schwarz\Documents\Git\TEIWorLD\teiworld\target\classes and
         // C:\Users\Schwarz\Documents\Git\TEIWorLD\teiworld\src\main\resources
         String jarTeicorpo = "teicorpo.jar";
-        String out= "C:\\Users\\Schwarz\\Documents\\Git\\TEIWorLD\\tmpoutput\\";
-
 
         for (int i = 0; i < fileList.length; i++){
 
@@ -216,31 +194,31 @@ public class TeiWorld {
             // [S1] Conversion of .eaf files with teicorpo
             if (fileList[i].getName().endsWith(".eaf")){
                 String in = fileList[i].getAbsoluteFile().toString();
-                ElanToTeiConvertor elanToTeiConv = new ElanToTeiConvertor(jarTeicorpo, in, out);
+                ElanToTeiConvertor elanToTeiConv = new ElanToTeiConvertor(jarTeicorpo, in, teiwrld.getOutputDir());
                 elanToTeiConv.convert();
             }
             // [S2] Conversion of .cha files with teicorpo
             if (fileList[i].getName().endsWith(".cha")){
                 String in = fileList[i].getAbsoluteFile().toString();
-                ClanToTeiConvertor clanToTeiConv = new ClanToTeiConvertor(jarTeicorpo, in, out);
+                ClanToTeiConvertor clanToTeiConv = new ClanToTeiConvertor(jarTeicorpo, in, teiwrld.getOutputDir());
                 clanToTeiConv.convert();
             }
             // [S3] Conversion of .trs files with teicorpo
             if (fileList[i].getName().endsWith(".trs")){
                 String in = fileList[i].getAbsoluteFile().toString();
-                TrsToTeiConvertor trsToTeiConv = new TrsToTeiConvertor(jarTeicorpo, in, out);
+                TrsToTeiConvertor trsToTeiConv = new TrsToTeiConvertor(jarTeicorpo, in, teiwrld.getOutputDir());
                 trsToTeiConv.convert();
             }
             // [S4] Conversion of .TextGrid praat files with teicorpo
             if (fileList[i].getName().endsWith(".TextGrid")){
                 String in = fileList[i].getAbsoluteFile().toString();
-                TextGridToTeiConvertor textGridToTeiConv = new TextGridToTeiConvertor(jarTeicorpo, in, out);
+                TextGridToTeiConvertor textGridToTeiConv = new TextGridToTeiConvertor(jarTeicorpo, in, teiwrld.getOutputDir());
                 textGridToTeiConv.convert();
             }
-            // [S5] Conversion of .qdpx files with teicorpo -----------CONTINUE HERE: class QdpxToTeiConvertor !!!!!!!!!!!!!!!!!!!!
+            // [S5] Conversion of .qdpx files with teicorpo -----------
             if (fileList[i].getName().endsWith(".qdpx")){
                 String in = fileList[i].getAbsoluteFile().toString();
-                QdpxToTeiConvertor qdpxToTeiConvertor = new QdpxToTeiConvertor(jarTeicorpo, in, out);
+                QdpxToTeiConvertor qdpxToTeiConvertor = new QdpxToTeiConvertor(jarTeicorpo, in, teiwrld.getOutputDir());
                 qdpxToTeiConvertor.convert();
             }
 
@@ -248,20 +226,19 @@ public class TeiWorld {
             // [W1] Conversion of .txt files with TEIgarage
             if (fileList[i].getName().endsWith(".txt")){
                 String in = fileList[i].getAbsoluteFile().toString();
-                TxtToTeiConvertor txtToTeiConvertor = new TxtToTeiConvertor(in, out);
+                TxtToTeiConvertor txtToTeiConvertor = new TxtToTeiConvertor(in, teiwrld.getOutputDir());
                 txtToTeiConvertor.convert();
             }
             // [W2] Conversion of .docx files with TEIgarage
             if (fileList[i].getName().endsWith(".docx")){
                 String in = fileList[i].getAbsoluteFile().toString();
-                DocxToTeiConvertor docxToTeiConvertor = new DocxToTeiConvertor(in, out);
+                DocxToTeiConvertor docxToTeiConvertor = new DocxToTeiConvertor(in, teiwrld.getOutputDir());
                 docxToTeiConvertor.convert();
             }
         }
 
-        // TO DO: Execute Conversion for written: call respective class and save each converted file into output directory
         // TO DO: Then call the code p52i5 to create a single written I5 file (IDS corpus) from the individually converted files
-
+        
 
     }
 }

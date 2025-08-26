@@ -1,5 +1,7 @@
 package org.example;
 
+import org.apache.commons.io.FileUtils;
+
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -42,17 +44,6 @@ public class QdpxToTeiConvertor implements ConvertorInterface {
 
     @Override
     public void convert() {
-        // process from Shell script:
-        // append ".ZIP" to file: mv 3wCno_4b_In.qdpx 3wCno_4b_In.qdpx.ZIP to be able to unzip it in the following step
-        // then unzip into temporary dir: unzip 3wCno_4b_In.qdpx.ZIP -d ./tmp
-        // get the txt-file's name in a variable which is in the dir "sources" that exists after unzipping: ./sources/*.txt
-        // check if the file is a txt file
-        // delete empty lines in file and save as temporary file: grep . ./tmp/sources/*.txt > ./tmp/sources/filename.txt
-        // execute java command for conversion: java -cp "teicorpo.jar" fr.ortolang.teicorpo.TeiCorpo -from text ./tmp/sources/filename.txt -o "$OUTPUTFILE_final"
-        // delete the appended ".ZIP" from file: mv 3wCno_4b_In.qdpx.ZIP 3wCno_4b_In.qdpx
-
-
-        // Actual process:
 
         // copy file to be converted to temporary directory and append .zip
         Path source = new File(this.inputFilePath).toPath();
@@ -64,15 +55,6 @@ public class QdpxToTeiConvertor implements ConvertorInterface {
             System.out.println("Error: Creating temporary directory not possible. '" + newTmpDirectory + "' already exists");
         }
         Path target = new File(newTmpDirectory.toString() + "\\" + source.getFileName() + ".zip").toPath();
-
-
-
-        System.out.println("source: " + source.getFileName());
-        System.out.println("target: " + target.getFileName());
-        System.out.println("target path: " + target);
-        System.out.println("target path without file: " + newTmpDirectory);
-
-
 
         try {
             // In Windows the directory for temporary files is by default: C:\Users\User\AppData\Local\Temp, in Linux and macOS: /tmp
@@ -99,91 +81,80 @@ public class QdpxToTeiConvertor implements ConvertorInterface {
             }
         });
 
+        for (int i = 0; i < allTxtFiles.length; i++){
 
+            // delete empty lines in file
+            String txtFileNoEmptyLines = allTxtFiles[i].toString().replace(".txt", "_convert.txt");
+            deleteEmptyLines(allTxtFiles[i].toString(), txtFileNoEmptyLines);
 
-        System.out.println("ALL TXT FILES in QDPX FOLDER:");
-        for (int i = 0; i < allTxtFiles.length; i++) {
-            System.out.println("File: " + allTxtFiles[i].getAbsoluteFile());
-        }
-
-
-        // delete empty lines in file
-        String txtFileNoEmptyLines = allTxtFiles[0].toString().replace(".txt", "_workingFile.txt");
-        deleteEmptyLines(allTxtFiles[0].toString(), txtFileNoEmptyLines);
-
-
-        // TO DO: keep the original name (without _workingFile), do something like:
-        //
-        //File file1 = new File("src/data.txt");
-        //File file2 = new File("src/data2.txt");
-        //
-        //file1.delete();
-        //file2.renameTo(file1);
-
-
-        System.out.println("workingFile: " + txtFileNoEmptyLines);
-
-
-
-        // see https://www.baeldung.com/java-execute-jar-file
-        Process process = null;
-
-        try {
-            String jarFile = new File(Objects.requireNonNull(getClass().getClassLoader()
-                            .getResource(this.jarPath))
-                    .toURI()).getAbsolutePath();
-
-            // JAR must be stored in two places:
-            // C:\Users\Schwarz\Documents\Git\TEIWorLD\teiworld\target\classes and
-            // C:\Users\Schwarz\Documents\Git\TEIWorLD\teiworld\src\main\resources
-            String jarFileCommonsIO = new File(Objects.requireNonNull(getClass().getClassLoader()
-                            .getResource("commons-io-2.19.0.jar"))
-                    .toURI()).getAbsolutePath();
-
-            // Command: java -cp teicorpo.jar;commons-io-2.19.0.jar fr.ortolang.teicorpo.TeiCorpo -from text inputfile.txt -o "path/output/directory/"
-            // command needs to be passed to process as a String array:
-            // { "java",
-            //   "-cp",
-            //   "C:\Users\Schwarz\Documents\Git\TEIWorLD\teiworld\target\classes\teicorpo.jar;C:\Users\Schwarz\Documents\Git\TEIWorLD\teiworld\target\classes\commons-io-2.19.0.jar",
-            //   "fr.ortolang.teicorpo.TeiCorpo",
-            //   "-from",
-            //   "text",
-            //   "C:\Users\Schwarz\AppData\Local\Temp\3wCno_4b_In.qdpx\sources\9F718AB7-6D95-411D-8A76-8B22FAC42672_workingFile.txt",
-            //   "-o",
-            //   "C:\Users\Schwarz\Documents\Git\TEIWorLD\tmpoutput\" };
-            String[] command = { "java", "-cp", jarFile.toString() + ";" + jarFileCommonsIO.toString(),
-                    "fr.ortolang.teicorpo.TeiCorpo", "-from", "text", txtFileNoEmptyLines, "-o", this.outputFilePath };
-
-            ProcessBuilder processBuilder = new ProcessBuilder(command);
-            processBuilder.redirectErrorStream(true);
-
-            process = processBuilder.start();  // Start process
-
-            try (InputStream inputStream = process.getInputStream()) {
-                byte[] output = inputStream.readAllBytes();
-                System.out.println("Output: " + new String(output));
+            // keep the original file name (without _convert):
+            try {
+                Files.delete(allTxtFiles[i].toPath());
             } catch (IOException e) {
-                System.err.println("Error handling process: " + e.getMessage());
+                System.err.println("Error deleting temporary file: " + e.getMessage());
+            }
+            File finalTxtFileNoEmptyLines = new File(allTxtFiles[i].toString());
+            File oldFile = new File(txtFileNoEmptyLines);
+            oldFile.renameTo(finalTxtFileNoEmptyLines);
+
+            // see https://www.baeldung.com/java-execute-jar-file
+            Process process = null;
+            try {
+                String jarFile = new File(Objects.requireNonNull(getClass().getClassLoader()
+                                .getResource(this.jarPath))
+                        .toURI()).getAbsolutePath();
+
+                // JAR must be stored in two places:
+                // C:\Users\Schwarz\Documents\Git\TEIWorLD\teiworld\target\classes and
+                // C:\Users\Schwarz\Documents\Git\TEIWorLD\teiworld\src\main\resources
+                String jarFileCommonsIO = new File(Objects.requireNonNull(getClass().getClassLoader()
+                                .getResource("commons-io-2.19.0.jar"))
+                        .toURI()).getAbsolutePath();
+
+                // Command: java -cp teicorpo.jar;commons-io-2.19.0.jar fr.ortolang.teicorpo.TeiCorpo -from text inputfile.txt -o "path/output/directory/"
+                // command needs to be passed to process as a String array:
+                // { "java",
+                //   "-cp",
+                //   "C:\Users\Schwarz\Documents\Git\TEIWorLD\teiworld\target\classes\teicorpo.jar;C:\Users\Schwarz\Documents\Git\TEIWorLD\teiworld\target\classes\commons-io-2.19.0.jar",
+                //   "fr.ortolang.teicorpo.TeiCorpo",
+                //   "-from",
+                //   "text",
+                //   "C:\Users\Schwarz\AppData\Local\Temp\3wCno_4b_In.qdpx\sources\9F718AB7-6D95-411D-8A76-8B22FAC42672.txt",
+                //   "-o",
+                //   "C:\Users\Schwarz\Documents\Git\TEIWorLD\tmpoutput\" };
+                String[] command = { "java", "-cp", jarFile.toString() + ";" + jarFileCommonsIO.toString(),
+                        "fr.ortolang.teicorpo.TeiCorpo", "-from", "text", finalTxtFileNoEmptyLines.toString(), "-o", this.outputFilePath };
+
+                ProcessBuilder processBuilder = new ProcessBuilder(command);
+                processBuilder.redirectErrorStream(true);
+
+                process = processBuilder.start();  // Start process
+
+                // Output the executed conversion to command line for informing the user (could be omitted)
+                try (InputStream inputStream = process.getInputStream()) {
+                    byte[] output = inputStream.readAllBytes();
+                    System.out.println("Output: " + new String(output));
+                } catch (IOException e) {
+                    System.err.println("Error handling process: " + e.getMessage());
+                }
+
+            } catch (URISyntaxException e) {
+                System.err.println("Error with URI syntax of jar files: " + e.getMessage());
+            } catch (IOException e) {
+                System.err.println("Error starting process: " + e.getMessage());
+            } finally {
+                if (process != null) {
+                    process.destroy();  // Ensure cleanup in all Java versions
+                }
             }
 
-        } catch (URISyntaxException e) {
-            System.err.println("Error with URI syntax of jar files: " + e.getMessage());
-        } catch (IOException e) {
-            System.err.println("Error starting process: " + e.getMessage());
-        } finally {
-            if (process != null) {
-                process.destroy();  // Ensure cleanup in all Java versions
+            // delete temporary directory (variable newTmpDirectory, C:\Users\Schwarz\AppData\Local\Temp\3wCno_4b_In.qdpx)
+            try {
+                FileUtils.deleteDirectory(newTmpDirectory);
+            } catch (IOException e) {
+                System.err.println("Error deleting temporary directory: " + e.getMessage());
             }
         }
-
-
-        // TO DO: delete temporary directory (variable newTmpDirectory) recursively (C:\Users\Schwarz\AppData\Local\Temp\3wCno_4b_In.qdpx)
-
-
-        // TO DO: instead of working on allTxtFiles[0] -> create for loop
-
-
-
     }
 
 
@@ -217,6 +188,7 @@ public class QdpxToTeiConvertor implements ConvertorInterface {
             }
             zipEntry = zis.getNextEntry();
         }
+        zis.close();
     }
 
 

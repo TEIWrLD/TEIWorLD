@@ -19,8 +19,6 @@ public class ConvertorUtils {
      */
     public static String prettyPrintXML(Path tempXmlOutputFilePath) throws IOException, ParserConfigurationException, TransformerException, SAXException {
 
-        System.out.println("Going to pretty print this: " + tempXmlOutputFilePath);
-
         File tempXmlOutputFile = new File(tempXmlOutputFilePath.toString());
         Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(tempXmlOutputFile);
 
@@ -34,16 +32,6 @@ public class ConvertorUtils {
         Writer prettyPrinted = new StringWriter();
         transformer.transform(new DOMSource(document), new StreamResult(prettyPrinted));
 
-        System.out.println("pretty printed string: ");
-        System.out.println(prettyPrinted);
-
         return prettyPrinted.toString();
-    }
-
-
-    public static void deleteFile(Path file) throws IOException {
-        Files.delete(file);
-        System.out.println("Temporary file deleted.");
-
     }
 }

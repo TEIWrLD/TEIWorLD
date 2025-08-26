@@ -73,7 +73,7 @@ public class DocxToTeiConvertor implements ConvertorInterface{
 
         //delete the temporary file as it is no longer needed
         try {
-            ConvertorUtils.deleteFile(tempOutputFilePath);
+            Files.delete(tempOutputFilePath);
         } catch (IOException e) {
             System.err.println("Error managing temporary file: " + e.getMessage());
         } finally {
