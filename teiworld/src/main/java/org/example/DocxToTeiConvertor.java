@@ -17,7 +17,7 @@ public class DocxToTeiConvertor implements ConvertorInterface{
     public DocxToTeiConvertor(String inPath, String outPath){
         this.inputFilePath = inPath;
         File f = new File(inPath);
-        String newOutputFileName = f.getName().toString().replace(".docx", ".tei_garage.xml");
+        String newOutputFileName = f.getName().replace(".docx", ".tei_garage.xml");
         this.outputFilePath = outPath + newOutputFileName;
     }
 
@@ -41,7 +41,7 @@ public class DocxToTeiConvertor implements ConvertorInterface{
 
         // Create temporary file for saving the non-pretty-printed XML output returned from Teigarage Webservice
         File f = new File(this.outputFilePath);
-        String tmpOutputFileNameNoExtension = f.getName().toString().replace(".xml", "");
+        String tmpOutputFileNameNoExtension = f.getName().replace(".xml", "");
 
         try {
             // In Windows the directory for temporary files is by default: C:\Users\User\AppData\Local\Temp, in Linux and macOS: /tmp

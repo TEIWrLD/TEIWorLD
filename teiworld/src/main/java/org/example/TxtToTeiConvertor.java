@@ -1,12 +1,8 @@
 package org.example;
 
-import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.*;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;

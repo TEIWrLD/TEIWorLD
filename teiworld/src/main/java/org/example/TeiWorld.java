@@ -70,7 +70,7 @@ public class TeiWorld {
                 || CliArguments[0].equalsIgnoreCase("-help") || CliArguments[0].equalsIgnoreCase("--help")) {
             System.out.println("usage: java -jar org.example.TeiWorld.jar [<mode>] [<path to input directory>] [<path to output directory>]");
             System.out.println("   mode     'spoken' - converts to TEIspoken and keeps files separate if there is more than one in the input directory");
-            System.out.println("            'written' - converts to TEI I5 and combines files to a single corpus in case there is more than one in the input dir");
+            System.out.println("            'written' - converts to TEI I5 and combines files to a single corpus in case there is more than one in the input directory. The file metadata.json needs to be in the same directory");
             System.out.println("            'writtenP5' - converts to TEI I5 and keeps files separate if there is more than one in the input directory");
             System.exit(0);
         }
@@ -179,6 +179,18 @@ public class TeiWorld {
         System.out.println("------");
         */
 
+        // Check if a file "metadata.json" is present in the input file directory
+        if (teiwrld.mode.equalsIgnoreCase("written")) {
+            File metadataFile = new File(teiwrld.inputDir + "\\metadata.json");
+            if (!metadataFile.exists()) {
+                System.out.println("No file with meta data found. When using the command 'written' the file " +
+                        "metadata.json is mandatory and needs to be present in the input directory path.\n" +
+                        "See also the help menu java -jar org.example.TeiWorld.jar -h");
+                System.exit(0);
+            }
+        }
+
+
         // Informing the user about the files that will be converted
         File[] fileList = teiwrld.getFilesToConvert(teiwrld.mode);
         if (fileList != null){
@@ -192,7 +204,7 @@ public class TeiWorld {
                     Arrays.toString(teiwrld.WRITTENFORMATS));
             System.exit(0);
         }
-        System.out.println("------");
+        System.out.println("... processing ...");
 
 
         // [S1-S5] All conversions with TeiCorpo: ElanToTeiConvertor, ClanToTeiConvertor, TranscriberToTeiConvertor, TextGridToTeiConvertor, QdpxToTeiConvertor:
@@ -250,14 +262,12 @@ public class TeiWorld {
             }
         }
 
-
-
-        // TO DO:
         // if the mode is written call the code p52i5 to create a single written I5 file (IDS corpus) from the individually converted files
         if (teiwrld.mode.equalsIgnoreCase("written")) {
-            // TO DO!
+            System.out.println("Transforming the above mentioned files to TEI I5 and compiling a single corpus (TEI I5)...");
+            P5ToI5Convertor p5ToI5Convertor =  new P5ToI5Convertor(teiwrld.inputDir, teiwrld.outputDir);
+            p5ToI5Convertor.convert();
         }
-
 
     }
 }
