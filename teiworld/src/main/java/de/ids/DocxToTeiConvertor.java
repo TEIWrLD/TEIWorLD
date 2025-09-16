@@ -1,23 +1,23 @@
-package org.example;
+package de.ids;
 
 import org.xml.sax.SAXException;
+
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.*;
+import javax.xml.transform.TransformerException;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class TxtToTeiConvertor implements ConvertorInterface {
-
+public class DocxToTeiConvertor implements ConvertorInterface{
     String inputFilePath;
     String outputFilePath;
-    String urlForTxtConversion = "https://teigarage.tei-c.org/ege-webservice/Conversions/txt%3Atext%3Aplain/odt%3Aapplication%3Avnd.oasis.opendocument.text/TEI%3Atext%3Axml";
+    String urlForTxtConversion = "https://teigarage.tei-c.org/ege-webservice/Conversions/docx%3Aapplication%3Avnd.openxmlformats-officedocument.wordprocessingml.document/TEI%3Atext%3Axml/";
     Path tempOutputFilePath; // In Windows the directory for temporary files is by default: C:\Users\User\AppData\Local\Temp, in Linux and macOS: /tmp
 
-    public TxtToTeiConvertor(String inPath, String outPath) {
+    public DocxToTeiConvertor(String inPath, String outPath){
         this.inputFilePath = inPath;
         File f = new File(inPath);
-        String newOutputFileName = f.getName().toString().replace(".txt", ".tei_garage.xml");
+        String newOutputFileName = f.getName().replace(".docx", ".tei_garage.xml");
         this.outputFilePath = outPath + newOutputFileName;
     }
 
@@ -37,12 +37,11 @@ public class TxtToTeiConvertor implements ConvertorInterface {
 
     @Override
     public void convert() {
-
         Process process = null;
 
         // Create temporary file for saving the non-pretty-printed XML output returned from Teigarage Webservice
         File f = new File(this.outputFilePath);
-        String tmpOutputFileNameNoExtension = f.getName().toString().replace(".xml", "");
+        String tmpOutputFileNameNoExtension = f.getName().replace(".xml", "");
 
         try {
             // In Windows the directory for temporary files is by default: C:\Users\User\AppData\Local\Temp, in Linux and macOS: /tmp
@@ -51,9 +50,8 @@ public class TxtToTeiConvertor implements ConvertorInterface {
             System.err.println("Error creating secure temporary file: " + e.getMessage());
         }
 
-        // curl -o outputfile.tei_garage.xml -F upload=@file.txt https://teigarage.tei-c.org/ege-webservice/Conversions/txt%3Atext%3Aplain/odt%3Aapplication%3Avnd.oasis.opendocument.text/TEI%3Atext%3Axml
+        // curl -o outputfile.tei_garage.xml -F upload=@file.docx https://teigarage.tei-c.org/ege-webservice/Conversions/docx%3Aapplication%3Avnd.openxmlformats-officedocument.wordprocessingml.document/TEI%3Atext%3Axml/
         String cmd = "curl -o " + tempOutputFilePath + " -F upload=@" + this.inputFilePath + " " + this.urlForTxtConversion;
-
         try {
             process = Runtime.getRuntime().exec(cmd);
             Thread.sleep(2000);

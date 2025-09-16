@@ -1,4 +1,4 @@
-package org.example;
+package de.ids;
 
 public interface ConvertorInterface {
 

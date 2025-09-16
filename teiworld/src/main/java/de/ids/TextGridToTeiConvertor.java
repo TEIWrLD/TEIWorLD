@@ -1,4 +1,4 @@
-package org.example;
+package de.ids;
 
 import java.io.File;
 import java.io.IOException;

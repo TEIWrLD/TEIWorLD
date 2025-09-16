@@ -1,4 +1,4 @@
-package org.example;
+package de.ids;
 
 import java.io.File;
 import java.io.IOException;
@@ -6,7 +6,7 @@ import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.util.Objects;
 
-public class ElanToTeiConvertor implements ConvertorInterface{
+public class ClanToTeiConvertor implements ConvertorInterface{
 
     String inputFilePath;
     String outputFilePath;
@@ -15,7 +15,7 @@ public class ElanToTeiConvertor implements ConvertorInterface{
     // TEIWorLD\teiworld\target\classes and
     // TEIWorLD\teiworld\src\main\resources
 
-    public ElanToTeiConvertor(String jar, String inPath, String outPath) {
+    public ClanToTeiConvertor(String jar, String inPath, String outPath) {
         this.jarPath = jar;
         this.inputFilePath = inPath;
         this.outputFilePath = outPath;
@@ -46,23 +46,23 @@ public class ElanToTeiConvertor implements ConvertorInterface{
                     .toURI()).getAbsolutePath();
 
             // JAR must be stored in two places:
-            // C:\Users\Schwarz\Documents\Git\TEIWorLD\teiworld\target\classes and
-            // C:\Users\Schwarz\Documents\Git\TEIWorLD\teiworld\src\main\resources
+            // TEIWorLD\teiworld\target\classes and
+            // TEIWorLD\teiworld\src\main\resources
             String jarFileCommonsIO = new File(Objects.requireNonNull(getClass().getClassLoader()
                             .getResource("commons-io-2.19.0.jar"))
                     .toURI()).getAbsolutePath();
 
-            // Command: java -cp teicorpo.jar;commons-io-2.19.0.jar fr.ortolang.teicorpo.ElanToTei  "inputfile.eaf" -o "path/output/directory/"
+            // Command: java -cp teicorpo.jar;commons-io-2.19.0.jar fr.ortolang.teicorpo.ClanToTei  "inputfile.cha" -o "path/output/directory/"
             // command needs to be passed to process as a String array:
             // { "java",
             //   "-cp",
             //   "C:\Users\Schwarz\Documents\Git\TEIWorLD\teiworld\target\classes\teicorpo.jar;C:\Users\Schwarz\Documents\Git\TEIWorLD\teiworld\target\classes\commons-io-2.19.0.jar",
-            //   "fr.ortolang.teicorpo.ElanToTei",
-            //   "C:\Users\Schwarz\Documents\Git\omniconverter\in\spokendata\file.eaf",
+            //   "fr.ortolang.teicorpo.ClanToTei",
+            //   "C:\Users\Schwarz\Documents\Git\omniconverter\in\spokendata\file.cha",
             //   "-o",
             //   "C:\Users\Schwarz\Documents\Git\TEIWorLD\tmpoutput\" };
             String[] command = { "java", "-cp", jarFile.toString() + ";" + jarFileCommonsIO.toString(),
-                    "fr.ortolang.teicorpo.ElanToTei", this.inputFilePath, "-o", this.outputFilePath };
+                    "fr.ortolang.teicorpo.ClanToTei", this.inputFilePath, "-o", this.outputFilePath };
 
             ProcessBuilder processBuilder = new ProcessBuilder(command);
             processBuilder.redirectErrorStream(true);
@@ -86,6 +86,5 @@ public class ElanToTeiConvertor implements ConvertorInterface{
                 process.destroy();  // Ensure cleanup in all Java versions
             }
         }
-
     }
 }

@@ -1,4 +1,4 @@
-package org.example;
+package de.ids;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -15,6 +15,7 @@ public class TeiWorld {
 
     // Class variables holding accepted file format and their corresponding mime type - not possible to use for
     // checking input files as java will return null with most of the file formats (trs, cha...)
+    /*
     private static final Map<String, String> FORMATMIMETYPES;
     static { //static initializer: static blocks can only use static variables and ALWAYS EXECUTE FIRST before the main() method (without having to create an object instance)
              // (see: https://www.baeldung.com/java-static-instance-initializer-blocks)
@@ -27,7 +28,7 @@ public class TeiWorld {
         tmpMap.put("docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
         tmpMap.put("txt", "text/plain");
         FORMATMIMETYPES = Collections.unmodifiableMap(tmpMap);
-    }
+    } */
 
     private String mode;
     private String inputDir;

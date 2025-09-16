@@ -1,4 +1,4 @@
-package org.example;
+package de.ids;
 
 import org.apache.commons.io.FileUtils;
 
