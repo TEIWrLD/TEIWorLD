@@ -41,9 +41,7 @@ public class ElanToTeiConvertor implements ConvertorInterface{
         Process process = null;
 
         try {
-            String jarFile = new File(Objects.requireNonNull(getClass().getClassLoader()
-                            .getResource(this.jarPath))
-                    .toURI()).getAbsolutePath();
+            String jarFile = new File(Objects.requireNonNull(getClass().getClassLoader().getResource(this.jarPath)).toURI()).getAbsolutePath();
 
             // JAR must be stored in two places:
             // C:\Users\Schwarz\Documents\Git\TEIWorLD\teiworld\target\classes and

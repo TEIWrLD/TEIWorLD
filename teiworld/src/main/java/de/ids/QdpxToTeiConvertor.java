@@ -54,7 +54,7 @@ public class QdpxToTeiConvertor implements ConvertorInterface {
         } else {
             System.out.println("Error: Creating temporary directory not possible. '" + newTmpDirectory + "' already exists");
         }
-        Path target = new File(newTmpDirectory.toString() + "\\" + source.getFileName() + ".zip").toPath();
+        Path target = new File(newTmpDirectory.toString() + File.separator + source.getFileName() + ".zip").toPath();
 
         try {
             // In Windows the directory for temporary files is by default: C:\Users\User\AppData\Local\Temp, in Linux and macOS: /tmp
@@ -71,7 +71,7 @@ public class QdpxToTeiConvertor implements ConvertorInterface {
         }
 
         // get the name of the txt-file(s) to be converted which is in the dir "sources" that exists after unzipping: ./sources/*.txt
-        File directory = new File(newTmpDirectory.toString() + "\\sources");
+        File directory = new File(newTmpDirectory.toString() + File.separator + "sources");
         File[] allTxtFiles = directory.listFiles( new FilenameFilter() {
             public boolean accept(File dir, String name) {
                 if ( name.toUpperCase().endsWith(".TXT") ) {

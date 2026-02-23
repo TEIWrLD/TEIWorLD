@@ -9,6 +9,7 @@
     <xsl:param name="korpusSigle" select="''"/>
     <xsl:param name="docSigle" select="''"/>
     <xsl:param name="textSigle" select="''"/>
+    <xsl:param name="textTitle" select="''"/>
     <xsl:variable name="concatenated-sigle">
         <xsl:value-of select="$korpusSigle"/>
         <xsl:text>.</xsl:text>
@@ -190,7 +191,7 @@
                         <xsl:value-of select="$textSigle"/>
                     </textSigle>
                     <t.title assemblage="external">
-                        <xsl:value-of select="tei:TEI/tei:teiHeader/tei:fileDesc/tei:titleStmt/tei:title"/>
+                        <xsl:value-of select="$textTitle"/>
                     </t.title>
                 </titleStmt>
                 <publicationStmt>

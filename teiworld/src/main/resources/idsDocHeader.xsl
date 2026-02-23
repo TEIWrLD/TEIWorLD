@@ -21,7 +21,9 @@
                         <xsl:text>/</xsl:text>
                         <xsl:value-of select="$docSigle"/>
                     </dokumentSigle>
-                    <d.title></d.title>
+                    <d.title>
+                        <xsl:value-of select="$docSigle"/>
+                    </d.title>
                 </titleStmt>
                 <publicationStmt>
                     <distributor/>
