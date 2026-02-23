@@ -14,23 +14,6 @@ public class TeiWorld {
     public static final String[] SPOKENFORMATS = {"eaf", "cha", "trs", "TextGrid", "qdpx"};
     public static final String[] WRITTENFORMATS = {"docx", "txt"};
 
-    // Class variables holding accepted file format and their corresponding mime type - not possible to use for
-    // checking input files as java will return null with most of the file formats (trs, cha...)
-    /*
-    private static final Map<String, String> FORMATMIMETYPES;
-    static { //static initializer: static blocks can only use static variables and ALWAYS EXECUTE FIRST before the main() method (without having to create an object instance)
-             // (see: https://www.baeldung.com/java-static-instance-initializer-blocks)
-        Map<String, String> tmpMap = new HashMap<String, String>();
-        tmpMap.put("eaf", "text/xml");
-        tmpMap.put("cha", "text/plain");
-        tmpMap.put("trs", "text/xml");
-        tmpMap.put("TextGrid", "application/octet-stream");
-        tmpMap.put("qdpx", "application/zip");
-        tmpMap.put("docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
-        tmpMap.put("txt", "text/plain");
-        FORMATMIMETYPES = Collections.unmodifiableMap(tmpMap);
-    } */
-
     private String mode;
     private String inputDir;
     private String outputDir;
