@@ -2,12 +2,15 @@ package de.ids;
 
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
+
+import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.*;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Locale;
 
@@ -20,10 +23,11 @@ public class ConvertorUtils {
      */
     public static String prettyPrintXML(Path tempXmlOutputFilePath) throws IOException, ParserConfigurationException, TransformerException, SAXException {
 
-        File tempXmlOutputFile = new File(tempXmlOutputFilePath.toString());
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
         documentBuilderFactory.setNamespaceAware(true);
-        Document document = documentBuilderFactory.newDocumentBuilder().parse(tempXmlOutputFile);
+        DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+        InputStream in = Files.newInputStream(tempXmlOutputFilePath);
+        Document document = documentBuilder.parse(in);
 
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();

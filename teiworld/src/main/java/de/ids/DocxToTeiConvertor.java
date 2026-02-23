@@ -51,15 +51,19 @@ public class DocxToTeiConvertor implements ConvertorInterface{
         }
 
         // curl -o outputfile.tei_garage.xml -F upload=@file.docx https://teigarage.tei-c.org/ege-webservice/Conversions/docx%3Aapplication%3Avnd.openxmlformats-officedocument.wordprocessingml.document/TEI%3Atext%3Axml/
-        String cmd = "curl -o " + tempOutputFilePath + " -F upload=@" + this.inputFilePath + " " + this.urlForTxtConversion;
+        ProcessBuilder pb = new ProcessBuilder(
+                "curl",
+                "-o", tempOutputFilePath.toString(),
+                "-F", "upload=@" + this.inputFilePath,
+                this.urlForTxtConversion
+        );
+
         try {
-            process = Runtime.getRuntime().exec(cmd);
-            Thread.sleep(2000);
-            while(process.isAlive()){
-                Thread.sleep(100);
-            }
+            process = pb.start();
+            int exitCode = process.waitFor(); // Wait until curl completely finishes writing the file
+            //System.out.println("curl finished with exit code: " + exitCode);
         } catch (IOException | InterruptedException e) {
-            System.err.println("Error executing command (" + cmd + "): " + e.getMessage());
+            System.err.println("Error executing command calling TEIGarage: " + e.getMessage());
         }
 
         try {
