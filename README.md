@@ -45,7 +45,7 @@ CorpusStructured
 └── metadata.json                        // MANDATORY file with the corpus metadata
 ```
 
-```
+```xml
 <idsCorpus version="1.0">
     <idsHeader type="corpus" pattern="allesaußerZtg/Zschr" version="1.0"> <!-- contains metadata from meatadata.json -->
     <idsDoc type="text" version="1.0"> <!-- dokumentSigle: NOZ/Directory01 -->
