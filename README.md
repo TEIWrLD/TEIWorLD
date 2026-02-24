@@ -24,6 +24,46 @@ Converts to TEI I5 and constructs the hierarchical document and text structure o
 The directory needs to contain the file `metadata.json` and one or more subdirectories (= idsDoc) that contain the individual texts (= idsText).<br>
 `de.ids.TeiWorld writtenHierarchical path\to\input\dir\ path\to\output\dir\`
 
+The folder structure of the input directory will be reflected in the XML tree:
+```
+CorpusStructured
+├── Directory01                          // directory name = dokumentSigle 
+│   ├── Kriterien für Datenaufnahme.txt  // file name = t.title
+│   └── Protokoll Projekttreffen.docx    // file name = t.title
+├── Directory02                          // directory name = dokumentSigle
+│   └── Planung Publikation.docx         // file name = t.title
+├── Directory03                          // directory name = dokumentSigle
+│   ├── Briefsammlung.txt                // file name = t.title
+│   ├── Essay.txt                        // file name = t.title
+│   ├── Essay_Kommentare.pdf             // FILE WILL BE IGNORED as PDF is no valid input format
+│   └── Workshop Korpusaufbau.docx       // file name = t.title
+├── Directory04                          // DIRECTORY WILL BE IGNORED as there is no file as a direct child
+│   └── folderXY                         // DIRECTORY WILL BE IGNORED, only files would be processed
+│       ├── dummyFile02.txt              // FILE WILL BE IGNORED
+│       └── emptyFolder                  // FILE WILL BE IGNORED
+├── dummyFile01.txt                      // FILE WILL BE IGNORED as it is not inside a directory
+└── metadata.json                        // MANDATORY file with the corpus metadata
+```
+
+<idsCorpus version="1.0">
+    <idsHeader type="corpus" pattern="allesaußerZtg/Zschr" version="1.0"> <!-- contains metadata from meatadata.json -->
+    <idsDoc type="text" version="1.0"> <!-- dokumentSigle: NOZ/Directory01 -->
+      <idsHeader type="document" pattern="text" version="1.0">
+      <idsText version="1.0">          <!-- textSigle: NOZ/Directory01.00001 | t.title: Kriterien für Datenaufnahme -->
+	  <idsText version="1.0">          <!-- textSigle: NOZ/Directory01.00002 | t.title: Protokoll Projekttreffen -->
+	</idsDoc>
+	<idsDoc type="text" version="1.0"> <!-- dokumentSigle: NOZ/Directory02 -->
+      <idsHeader type="text" pattern="text" version="1.0">
+      <idsText version="1.0">          <!-- textSigle: NOZ/Directory02.00001 | t.title: Planung Publikation -->
+	</idsDoc>
+	<idsDoc type="text" version="1.0"> <!-- dokumentSigle: NOZ/Directory03 -->
+      <idsHeader type="text" pattern="text" version="1.0">
+	  <idsText version="1.0">          <!-- textSigle: NOZ/Directory03.00001 | t.title: Briefsammlung -->
+	  <idsText version="1.0">          <!-- textSigle: NOZ/Directory03.00002 | t.title: Essay -->
+	  <idsText version="1.0">          <!-- textSigle: NOZ/Directory03.00003 | t.title: Workshop Korpusaufbau -->
+	</idsDoc>
+</idsCorpus>
+
 
 ### Components
 [TEIGarage](https://github.com/TEIC/TEIGarage)<br>
