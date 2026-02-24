@@ -7,19 +7,19 @@ TEIWorLD transforms a variety of different formats for spoken and written langua
 </div>
 
 ## Usage
-Command **spoken**:<br>
+#### Command **spoken**:<br>
 Converts to TEIspoken and keeps files separate if there is more than one in the input directory<br>
 `de.ids.TeiWorld spoken path\to\input\dir\ path\to\output\dir\`
 
-Command **written**:<br>
+#### Command **written**:<br>
 Converts to TEI I5 and combines files to a single corpus in case there is more than one in the input directory. The file `metadata.json` needs to be in the same directory<br>
 `de.ids.TeiWorld written path\to\input\dir\ path\to\output\dir\`
 
-Command **writtenP5**:<br>
+#### Command **writtenP5**:<br>
 Converts to TEI I5 and keeps files separate if there is more than one in the input directory<br>
 `de.ids.TeiWorld writtenP5 path\to\input\dir\ path\to\output\dir\`
 
-Command **writtenHierarchical**:<br>
+#### Command **writtenHierarchical**:<br>
 Converts to TEI I5 and constructs the hierarchical document and text structure of a written corpus. 
 The directory needs to contain the file `metadata.json` and one or more subdirectories (= idsDoc) that contain the individual texts (= idsText).<br>
 `de.ids.TeiWorld writtenHierarchical path\to\input\dir\ path\to\output\dir\`
@@ -45,6 +45,7 @@ CorpusStructured
 └── metadata.json                        // MANDATORY file with the corpus metadata
 ```
 
+```
 <idsCorpus version="1.0">
     <idsHeader type="corpus" pattern="allesaußerZtg/Zschr" version="1.0"> <!-- contains metadata from meatadata.json -->
     <idsDoc type="text" version="1.0"> <!-- dokumentSigle: NOZ/Directory01 -->
@@ -63,6 +64,7 @@ CorpusStructured
 	  <idsText version="1.0">          <!-- textSigle: NOZ/Directory03.00003 | t.title: Workshop Korpusaufbau -->
 	</idsDoc>
 </idsCorpus>
+```
 
 
 ### Components
