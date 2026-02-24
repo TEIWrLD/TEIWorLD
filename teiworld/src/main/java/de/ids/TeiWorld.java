@@ -56,7 +56,7 @@ public class TeiWorld {
             System.out.println("usage: java -jar de.ids.TeiWorld.jar [<mode>] [<path to input directory>] [<path to output directory>]");
             System.out.println("   mode     'spoken' - converts to TEIspoken and keeps files separate if there is more than one in the input directory");
             System.out.println("            'written' - converts to TEI I5 and combines files to a single corpus in case there is more than one in the input directory. The file metadata.json needs to be in the same directory");
-            System.out.println("            'writtenP5' - converts to TEI I5 and keeps files separate if there is more than one in the input directory");
+            System.out.println("            'writtenP5' - converts to TEI P5 and keeps files separate if there is more than one in the input directory");
             System.out.println("            'writtenHierarchical' - converts to TEI I5 and constructs the hierarchical document and text structure of a written corpus. The directory needs to contain the file metadata.json and one or more subdirectories (= idsDoc) that contain the individual texts (= idsText).");
             System.exit(0);
         }

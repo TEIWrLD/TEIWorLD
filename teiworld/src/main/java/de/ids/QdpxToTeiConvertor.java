@@ -16,7 +16,7 @@ public class QdpxToTeiConvertor implements ConvertorInterface {
 
     String inputFilePath;
     String outputFilePath;
-    String jarPath;  // where to store JAR file of TEICorpo? Inside the java project structure?
+    String jarPath;  // where to store JAR file of TEICorpo
     Path tempOutputFilePath; // In Windows the directory for temporary files is by default: C:\Users\User\AppData\Local\Temp, in Linux and macOS: /tmp
     // JARs must be stored in two places:
     // TEIWorLD\teiworld\target\classes and
