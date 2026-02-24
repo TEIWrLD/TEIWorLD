@@ -169,7 +169,7 @@ public class P5ToI5Convertor implements ConvertorInterface {
         File outputFile = new File( this.outputFilePath + File.separator + corpusSigle + ".i5.xml");
         try (FileOutputStream fos = new FileOutputStream(outputFile)) {
             fos.write(finalOutput.getBytes());
-            System.out.println("Transformation completed: " + outputFile.getAbsoluteFile());
+            System.out.println("... Transformation completed: " + outputFile.getAbsoluteFile());
         } catch (IOException e) {
             System.err.println("Error writing to file: " + e.getMessage());
         }

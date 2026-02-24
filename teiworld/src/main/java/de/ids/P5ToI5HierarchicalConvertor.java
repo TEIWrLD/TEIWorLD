@@ -47,7 +47,7 @@ public class P5ToI5HierarchicalConvertor implements ConvertorInterface {
     }
 
     /**
-     * Creates a Map of DokumentSigles that each hold a list of Files running under the respective dokumentSigle.
+     * Creates a Linked Map of DokumentSigles that each hold a list of Files running under the respective dokumentSigle.
      * e.g. { Directory01=[path\file01.tei_garage.xml, path\file02.tei_garage.xml],
      *        Directory02=[path\fileXY.tei_garage.xml],
      *        Directory03=[path\fileA.tei_garage.xml, path\fileB.tei_garage.xml, path\fileC.tei_garage.xml] }
@@ -56,17 +56,18 @@ public class P5ToI5HierarchicalConvertor implements ConvertorInterface {
      * @param p5fileList the List of the already to P5 converted files necessary to back check which original files have actually been converted
      * @return a Map containing the document sigles (that correspond to the directory names) as value and a list of files beloning to the document as a key
      */
-    private static Map<String, List<File>> getHierarchicicalMap(File [] originalFilesFromInputDir, File [] p5fileList){
-        Map<String, List<File>> data = new HashMap<String, List<File>>();
+    private static LinkedHashMap<String, List<File>> getHierarchicicalMap(File [] originalFilesFromInputDir, File [] p5fileList){
+        LinkedHashMap<String, List<File>> data = new LinkedHashMap<String, List<File>>();
 
         for (File original : originalFilesFromInputDir) {
             String docName = original.getParentFile().getName();
             String fileName = original.getName().substring(0, original.getName().lastIndexOf('.'));
 
             File p5fileCurrent = null;
-            for (File pf5 : p5fileList){
-                if (pf5.getName().contains(fileName)){
-                    p5fileCurrent = pf5;
+            for (File p5f : p5fileList){
+                if (p5f.getName().contains(fileName)){
+                    p5fileCurrent = p5f;
+                    break;
                 }
             }
 
@@ -229,7 +230,7 @@ public class P5ToI5HierarchicalConvertor implements ConvertorInterface {
         File outputFile = new File( this.outputFilePath + File.separator + corpusSigle + ".i5.xml");
         try (FileOutputStream fos = new FileOutputStream(outputFile)) {
             fos.write(finalOutput.getBytes());
-            System.out.println("Transformation completed: " + outputFile.getAbsoluteFile());
+            System.out.println("... Transformation completed: " + outputFile.getAbsoluteFile());
         } catch (IOException e) {
             System.err.println("Error writing to file: " + e.getMessage());
         }
