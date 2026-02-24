@@ -37,7 +37,9 @@ path\to\input\dir\
 ```
 
 #### Command **written**:<br>
-Converts to TEI I5 and combines files to a single I5 corpus. The file `metadata.json` needs to be in the same directory. All files will be put under the one single dokumentSigle whose name is read from `metadata.json`<br>
+Converts to TEI I5 and combines files to a single I5 corpus. The file `metadata.json` needs to be in the same directory.<br>
+The corpusSigle is taken from `metadata.json`.<br>
+All files will be put under the one single dokumentSigle whose label is also extracted from `metadata.json`.
 `de.ids.TeiWorld written path\to\input\dir\ path\to\output\dir\`
 ```
 path\to\input\dir\
@@ -61,6 +63,7 @@ path\to\input\dir\
 #### Command **writtenHierarchical**:<br>
 Converts to TEI I5 and constructs the hierarchical document and text structure of a written corpus. 
 The directory needs to contain the file `metadata.json` and one or more subdirectories (= idsDoc) that contain the individual texts (= idsText).<br>
+In this mode only the corpusSigle is taken from `metadata.json`.
 `de.ids.TeiWorld writtenHierarchical path\to\input\dir\ path\to\output\dir\`
 
 The folder structure of the input directory will be reflected in the resulting I5 XML tree:
