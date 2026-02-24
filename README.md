@@ -66,7 +66,7 @@ The directory needs to contain the file `metadata.json` and one or more subdirec
 In this mode only the corpusSigle is taken from `metadata.json`.
 `de.ids.TeiWorld writtenHierarchical path\to\input\dir\ path\to\output\dir\`
 
-The folder structure of the input directory will be reflected in the resulting I5 XML tree:
+The **folder structure of the input directory** will be reflected in the resulting **I5 XML tree**:
 ```
 path\to\input\dir\
 ├── Directory01                          // After conversion: directory name = dokumentSigle 
