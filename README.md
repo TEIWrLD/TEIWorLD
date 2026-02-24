@@ -8,7 +8,7 @@ TEIWorLD transforms a variety of different formats for spoken and written langua
 
 ## Usage
 #### Command **spoken**:<br>
-Converts to TEIspoken and keeps files separate if there is more than one in the input directory<br>
+Converts all files of spoken data format (see data formats below) to TEIspoken and keeps files separate if there is more than one in the input directory<br>
 `de.ids.TeiWorld spoken path\to\input\dir\ path\to\output\dir\`
 ```
 path\to\input\dir\
@@ -26,7 +26,7 @@ path\to\input\dir\
 ```
 
 #### Command **writtenP5**:<br>
-Converts to TEI P5 and keeps the resulting files separate if there is more than one in the input directory<br>
+Converts all files of written data format (see data formats below) to TEI P5 and keeps the resulting files separate if there is more than one in the input directory<br>
 `de.ids.TeiWorld writtenP5 path\to\input\dir\ path\to\output\dir\`
 ```
 path\to\input\dir\
@@ -37,9 +37,10 @@ path\to\input\dir\
 ```
 
 #### Command **written**:<br>
-Converts to TEI I5 and combines files to a single I5 corpus. The file `metadata.json` needs to be in the same directory.<br>
+Converts all files of written data format (see data formats below) to TEI I5 and combines files to a single I5 corpus.<br>
+The file `metadata.json` needs to be in the same directory.<br>
 The corpusSigle is taken from `metadata.json`.<br>
-All files will be put under the one single dokumentSigle whose label is also extracted from `metadata.json`.
+All files will be put under the one **single** dokumentSigle whose label is also extracted from `metadata.json`.
 `de.ids.TeiWorld written path\to\input\dir\ path\to\output\dir\`
 ```
 path\to\input\dir\
@@ -61,7 +62,7 @@ path\to\input\dir\
 ```
 
 #### Command **writtenHierarchical**:<br>
-Converts to TEI I5 and constructs the hierarchical document and text structure of a written corpus. 
+Converts all files of written data format (see data formats below) to TEI I5 and constructs the hierarchical document and text structure of a written corpus.<br>
 The directory needs to contain the file `metadata.json` and one or more subdirectories (= idsDoc) that contain the individual texts (= idsText).<br>
 In this mode only the corpusSigle is taken from `metadata.json`.
 `de.ids.TeiWorld writtenHierarchical path\to\input\dir\ path\to\output\dir\`
