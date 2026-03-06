@@ -1,8 +1,10 @@
 package de.ids;
 
-import java.io.File;
-import java.io.FileFilter;
-import java.io.IOException;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -55,9 +57,9 @@ public class TeiWorld {
                 || CliArguments[0].equalsIgnoreCase("-help") || CliArguments[0].equalsIgnoreCase("--help")) {
             System.out.println("usage: java -jar de.ids.TeiWorld.jar [<mode>] [<path to input directory>] [<path to output directory>]");
             System.out.println("   mode     'spoken' - converts to TEIspoken and keeps files separate if there is more than one in the input directory");
-            System.out.println("            'written' - converts to TEI I5 and combines files to a single corpus in case there is more than one in the input directory. The file metadata.json needs to be in the same directory");
+            System.out.println("            'written' - converts to TEI I5 and combines files to a single corpus in case there is more than one in the input directory. The file metadata.json needs to be in the same directory, containing the keys \"CorpusSigle\" and \"DocumentSigle\", both with non-empty values");
             System.out.println("            'writtenP5' - converts to TEI P5 and keeps files separate if there is more than one in the input directory");
-            System.out.println("            'writtenHierarchical' - converts to TEI I5 and constructs the hierarchical document and text structure of a written corpus. The directory needs to contain the file metadata.json and one or more subdirectories (= idsDoc) that contain the individual texts (= idsText).");
+            System.out.println("            'writtenHierarchical' - converts to TEI I5 and constructs the hierarchical document and text structure of a written corpus. The directory needs to contain the file metadata.json (with the key \"CorpusSigle\" and its non-empty value) and one or more subdirectories (= idsDoc) that contain the individual texts (= idsText).");
             System.exit(0);
         }
 
@@ -209,6 +211,39 @@ public class TeiWorld {
                         "metadata.json is mandatory and needs to be present in the input directory path.\n" +
                         "See also the help menu java -jar de.ids.TeiWorld.jar -h");
                 System.exit(0);
+            } else {
+                try {
+                    // Open and Parse the JSON file and convert to JSONObject
+                    FileReader reader = new FileReader(metadataFile);
+                    JSONParser jsonParser = new JSONParser();
+                    Object obj = jsonParser.parse(reader);
+                    JSONObject jsonObject = (JSONObject) obj;
+
+                    // metadata.json exists but no CorpusSigle: for mode writtenHierarchical there needs to be a non-empty "CorpusSigle"
+                    if (teiwrld.mode.equalsIgnoreCase("writtenHierarchical")){
+                        if (!jsonObject.containsKey("CorpusSigle") || jsonObject.get("CorpusSigle").toString().length() == 0){
+                            System.out.println("For the mode writtenHierarchical the file metadata.json needs to contain the key CorpusSigle with a non-empty value.\n" +
+                                    "See also the help menu java -jar de.ids.TeiWorld.jar -h");
+                            System.exit(0);
+                        }
+                    }
+
+                    // metadata.json exists but no CorpusSigle or DocumentSigle for mode written there needs to be a non-empty "CorpusSigle" and a non-empty "DocumentSigle"
+                    if (teiwrld.mode.equalsIgnoreCase("written")){
+                        if ((!jsonObject.containsKey("CorpusSigle") || jsonObject.get("CorpusSigle").toString().length() == 0) ||
+                                (!jsonObject.containsKey("DocumentSigle") || jsonObject.get("DocumentSigle").toString().length() == 0)){
+                            System.out.println("For the mode written the file metadata.json needs to contain the keys CorpusSigle and DocumentSigle both with non-empty values.\n" +
+                                    "See also the help menu java -jar de.ids.TeiWorld.jar -h");
+                            System.exit(0);
+                        }
+                    }
+                } catch (FileNotFoundException e) {
+                    System.err.println("Error finding JSON metadata file metadata.json: " + e.getMessage());
+                    System.exit(0);
+                } catch (IOException | ParseException e) {
+                    System.err.println("Error parsing JSON file metadata.json: " + e.getMessage());
+                    System.exit(0);
+                }
             }
         }
 
