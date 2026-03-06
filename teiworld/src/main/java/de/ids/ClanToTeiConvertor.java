@@ -61,7 +61,7 @@ public class ClanToTeiConvertor implements ConvertorInterface{
             //   "C:\Users\Schwarz\Documents\Git\omniconverter\in\spokendata\file.cha",
             //   "-o",
             //   "C:\Users\Schwarz\Documents\Git\TEIWorLD\tmpoutput\" };
-            String[] command = { "java", "-cp", jarFile.toString() + ";" + jarFileCommonsIO.toString(),
+            String[] command = { "java", "-cp", jarFile.toString() + File.pathSeparator + jarFileCommonsIO.toString(),
                     "fr.ortolang.teicorpo.ClanToTei", this.inputFilePath, "-o", this.outputFilePath };
 
             ProcessBuilder processBuilder = new ProcessBuilder(command);

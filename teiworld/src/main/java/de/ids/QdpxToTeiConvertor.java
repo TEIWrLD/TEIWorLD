@@ -122,7 +122,7 @@ public class QdpxToTeiConvertor implements ConvertorInterface {
                 //   "C:\Users\Schwarz\AppData\Local\Temp\3wCno_4b_In.qdpx\sources\9F718AB7-6D95-411D-8A76-8B22FAC42672.txt",
                 //   "-o",
                 //   "C:\Users\Schwarz\Documents\Git\TEIWorLD\tmpoutput\" };
-                String[] command = { "java", "-cp", jarFile.toString() + ";" + jarFileCommonsIO.toString(),
+                String[] command = { "java", "-cp", jarFile.toString() + File.pathSeparator + jarFileCommonsIO.toString(),
                         "fr.ortolang.teicorpo.TeiCorpo", "-from", "text", finalTxtFileNoEmptyLines.toString(), "-o", this.outputFilePath };
 
                 ProcessBuilder processBuilder = new ProcessBuilder(command);
