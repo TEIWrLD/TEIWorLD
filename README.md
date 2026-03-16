@@ -7,9 +7,25 @@ TEIWorLD transforms a variety of different formats for spoken and written langua
 </div>
 
 ## Usage
+If you want to build the app, download teiworld and inside the directory `teiworld/` run `mvn clean package`
+
+Without the build process: 
+1. Download directory `teiworld/target/teiworld-1.0-SNAPSHOT`, make sure it includes the following:
+```
+teiworld-1.0-SNAPSHOT
+├── teiworld.jar
+└── lib
+    ├── teicorpo.jar
+    └── commons-io-2.19.0.jar
+```
+2. Inside the directory run the programm with `java -jar teiworld.jar [mode] [input directory] [output directory]`
+3. Call help menu: `java -jar teiworld.jar -h`
+4. For examples of the different modes see below.
+
 #### Command **spoken**:<br>
 Converts all files of spoken data format (see data formats below) to TEIspoken and keeps files separate if there is more than one in the input directory<br>
-`de.ids.TeiWorld spoken path\to\input\dir\ path\to\output\dir\`
+Linux:   `java -jar teiworld.jar spoken ../spoken ../spoken-output`
+Windows: `java -jar teiworld.jar spoken ..\spoken ..\spoken-output`
 ```
 path\to\input\dir\
 ├── 01.10.07-1_2_transcription.eaf       // After conversion: 01.10.07-1_2_transcription.tei_corpo.xml
@@ -27,7 +43,8 @@ path\to\input\dir\
 
 #### Command **writtenP5**:<br>
 Converts all files of written data format (see data formats below) to TEI P5 and keeps the resulting files separate if there is more than one in the input directory<br>
-`de.ids.TeiWorld writtenP5 path\to\input\dir\ path\to\output\dir\`
+Linux:   `java -jar teiworld.jar writtenP5 ../writtenP5 ../writtenP5-output`
+Windows: `java -jar teiworld.jar writtenP5 ..\writtenP5 ..\writtenP5-output`
 ```
 path\to\input\dir\
 ├── fileA.txt                            // After conversion: fileA.tei_garage.xml
@@ -41,7 +58,8 @@ Converts all files of written data format (see data formats below) to TEI I5 and
 The file `metadata.json` needs to be in the same directory.<br>
 The corpusSigle is taken from `metadata.json`.<br>
 All files will be put under the one **single** dokumentSigle whose label is also extracted from `metadata.json`.
-`de.ids.TeiWorld written path\to\input\dir\ path\to\output\dir\`
+Linux:   `java -jar teiworld.jar written ../written ../written-output`
+Windows: `java -jar teiworld.jar written ..\written ..\written-output`
 ```
 path\to\input\dir\
 ├── pic.PNG                              // FILE WILL BE IGNORED as PNG is no valid input format for mode written
@@ -65,7 +83,8 @@ path\to\input\dir\
 Converts all files of written data format (see data formats below) to TEI I5 and constructs the hierarchical document and text structure of a written corpus.<br>
 The directory needs to contain the file `metadata.json` and one or more subdirectories (= idsDoc) that contain the individual texts (= idsText).<br>
 In this mode only the corpusSigle is taken from `metadata.json`.
-`de.ids.TeiWorld writtenHierarchical path\to\input\dir\ path\to\output\dir\`
+Linux:   `java -jar teiworld.jar writtenHierarchical ../writtenHierarchical ../writtenHierarchical-output`
+Windows: `java -jar teiworld.jar writtenHierarchical ..\writtenHierarchical ..\writtenHierarchical-output`
 
 The **folder structure of the input directory** will be reflected in the resulting **I5 XML tree**:
 ```
