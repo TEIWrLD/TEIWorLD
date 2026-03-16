@@ -1,5 +1,12 @@
 # TEIWorLD (TEI Workflow for Language Data)
 Tool to convert several written and spoken language data formats into TEI<br>
+
+* [Description and Data Formats](https://github.com/TEIWrLD/TEIWorLD?tab=readme-ov-file#description)
+* [Usage Instructions](https://github.com/TEIWrLD/TEIWorLD?tab=readme-ov-file#usage)
+* [Components](https://github.com/TEIWrLD/TEIWorLD?tab=readme-ov-file#components)
+* [Publications](https://github.com/TEIWrLD/TEIWorLD?tab=readme-ov-file#publications)
+* [Contact](https://github.com/TEIWrLD/TEIWorLD?tab=readme-ov-file#contact)
+
 ## Description
 TEIWorLD transforms a variety of different formats for spoken and written language into the standardised formats TEISpoken and I5 with the intermediate format TEI P5. For archiving written data, the pipeline converts TEI P5 to the format used at IDS, the I5 format, which was developed by IDS based on TEI P5.<br>
 <div align="center">
@@ -150,8 +157,6 @@ P5ToI5<br>
 
 
 ## Publications
-
-## Team
 
 ## Contact
 * [E-Mail](mailto:data-steward@ids-mannheim.de)
