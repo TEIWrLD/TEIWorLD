@@ -6,6 +6,20 @@ TEIWorLD transforms a variety of different formats for spoken and written langua
   <img src="images/Grafik_UML.png" alt="Schematic representation of the components of TEIWorLD">
 </div>
 
+### Data formats
+#### Input (spoken formats)
+* eaf (Elan)
+* textgrid (Praat)
+* cha (chat/childes)
+* trs (transcriber)
+* maxqda (qdpx/mx24)
+#### Input (written formats)
+* txt
+* docx/doc
+#### Output
+* ISO/TEI Transcriptions of Spoken Language (TEISpoken)
+* IDS TEI P5 (I5)
+
 ## Usage
 If you want to build the app, download teiworld and inside the directory `teiworld/` run `mvn clean package`
 
@@ -133,19 +147,7 @@ path\to\input\dir\
 [TEIGarage](https://github.com/TEIC/TEIGarage)<br>
 [TEICORPO](https://github.com/christopheparisse/teicorpo)<br>
 P5ToI5<br>
-### Data formats
-#### Input (spoken formats)
-eaf (Elan)<br>
-textgrid (Praat)<br>
-cha (chat/childes)<br>
-trs (transcriber)<br>
-maxqda (qdpx/mx24)<br>
-#### Input (written formats)
-txt<br>
-docx/doc<br>
-#### Output
-ISO/TEI Transcriptions of Spoken Language (TEISpoken)<br>
-IDS TEI P5 (I5)<br>
+
 
 ## Publications
 
