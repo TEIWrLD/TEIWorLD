@@ -3,17 +3,12 @@ package de.ids;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URISyntaxException;
-import java.util.Objects;
 
 public class TrsToTeiConvertor implements ConvertorInterface {
 
     String inputFilePath;
     String outputFilePath;
-    String jarPath;  // where to store JAR file of TEICorpo? Inside the java project structure?
-    // JARs must be stored in two places:
-    // TEIWorLD\teiworld\target\classes and
-    // TEIWorLD\teiworld\src\main\resources
+    String jarPath;
 
     public TrsToTeiConvertor(String jar, String inPath, String outPath){
         this.jarPath = jar;
@@ -41,32 +36,28 @@ public class TrsToTeiConvertor implements ConvertorInterface {
         Process process = null;
 
         try {
-            String jarFile = new File(Objects.requireNonNull(getClass().getClassLoader()
-                            .getResource(this.jarPath))
-                    .toURI()).getAbsolutePath();
+            File appDir = new File(System.getProperty("user.dir"));
+            File libDir = new File(appDir, "lib");
 
-            // JAR must be stored in two places:
-            // TEIWorLD\teiworld\target\classes and
-            // TEIWorLD\teiworld\src\main\resources
-            String jarFileCommonsIO = new File(Objects.requireNonNull(getClass().getClassLoader()
-                            .getResource("commons-io-2.19.0.jar"))
-                    .toURI()).getAbsolutePath();
+            File teicorpoJar = new File(libDir, "teicorpo.jar");
+            File commonsIoJar = new File(libDir, "commons-io-2.19.0.jar");
 
-            // Command: java -cp teicorpo.jar;commons-io-2.19.0.jar fr.ortolang.teicorpo.TranscriberToTei  "inputfile.trs" -o "path/output/directory/"
-            // command needs to be passed to process as a String array:
-            // { "java",
-            //   "-cp",
-            //   "C:\Users\Schwarz\Documents\Git\TEIWorLD\teiworld\target\classes\teicorpo.jar;C:\Users\Schwarz\Documents\Git\TEIWorLD\teiworld\target\classes\commons-io-2.19.0.jar",
-            //   "fr.ortolang.teicorpo.TranscriberToTei",
-            //   "C:\Users\Schwarz\Documents\Git\omniconverter\in\spokendata\file.trs",
-            //   "-o",
-            //   "C:\Users\Schwarz\Documents\Git\TEIWorLD\tmpoutput\" };
-            String[] command = { "java", "-cp", jarFile.toString() + File.pathSeparator + jarFileCommonsIO.toString(),
-                    "fr.ortolang.teicorpo.TranscriberToTei", this.inputFilePath, "-o", this.outputFilePath };
+            String classpath = teicorpoJar.getAbsolutePath()
+                    + File.pathSeparator
+                    + commonsIoJar.getAbsolutePath();
+
+            String[] command = {
+                    "java",
+                    "-cp",
+                    classpath,
+                    "fr.ortolang.teicorpo.TranscriberToTei",
+                    this.inputFilePath,
+                    "-o",
+                    this.outputFilePath
+            };
 
             ProcessBuilder processBuilder = new ProcessBuilder(command);
             processBuilder.redirectErrorStream(true);
-
             process = processBuilder.start();  // Start process
 
             // Output the executed conversion to command line for informing the user (could be omitted)
@@ -77,8 +68,6 @@ public class TrsToTeiConvertor implements ConvertorInterface {
                 System.err.println("Error handling process: " + e.getMessage());
             }
 
-        } catch (URISyntaxException e) {
-            System.err.println("Error with URI syntax of jar files: " + e.getMessage());
         } catch (IOException e) {
             System.err.println("Error starting process: " + e.getMessage());
         } finally {

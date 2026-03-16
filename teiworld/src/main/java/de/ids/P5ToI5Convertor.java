@@ -53,11 +53,22 @@ public class P5ToI5Convertor implements ConvertorInterface {
         JSONObject jsonObject = null;
 
         try {
-            // Create transformers for XSL files
-            transformerCorpHeader = factory.newTransformer(new StreamSource("teiworld/src/main/resources/idsCorpusHeader.xsl"));
-            transformerDocHeader = factory.newTransformer(new StreamSource("teiworld/src/main/resources/idsDocHeader.xsl"));
-            transformerText = factory.newTransformer(new StreamSource("teiworld/src/main/resources/idsText.xsl"));
-
+            // Create and configure transformers for XSL files
+            InputStream corpHeaderXsl = getClass().getClassLoader()
+                    .getResourceAsStream("idsCorpusHeader.xsl");
+            InputStream docHeaderXsl = getClass().getClassLoader()
+                    .getResourceAsStream("idsDocHeader.xsl");
+            InputStream textXsl = getClass().getClassLoader()
+                    .getResourceAsStream("idsText.xsl");
+            transformerCorpHeader = factory.newTransformer(new StreamSource(corpHeaderXsl));
+            transformerDocHeader = factory.newTransformer(new StreamSource(docHeaderXsl));
+            transformerText = factory.newTransformer(new StreamSource(textXsl));
+            transformerCorpHeader.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+            transformerDocHeader.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+            transformerText.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+            transformerCorpHeader.setOutputProperty(OutputKeys.INDENT, "yes");
+            transformerDocHeader.setOutputProperty(OutputKeys.INDENT, "yes");
+            transformerText.setOutputProperty(OutputKeys.INDENT, "yes");
 
         } catch (TransformerConfigurationException e) {
             System.err.println("Error creating XSL Transformers: " + e.getMessage());

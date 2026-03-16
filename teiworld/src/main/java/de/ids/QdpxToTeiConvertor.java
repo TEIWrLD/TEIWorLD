@@ -8,19 +8,14 @@ import java.nio.file.Path;
 import java.util.Scanner;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
-import java.util.Objects;
-import java.net.URISyntaxException;
 
 
 public class QdpxToTeiConvertor implements ConvertorInterface {
 
     String inputFilePath;
     String outputFilePath;
-    String jarPath;  // where to store JAR file of TEICorpo
+    String jarPath;
     Path tempOutputFilePath; // In Windows the directory for temporary files is by default: C:\Users\User\AppData\Local\Temp, in Linux and macOS: /tmp
-    // JARs must be stored in two places:
-    // TEIWorLD\teiworld\target\classes and
-    // TEIWorLD\teiworld\src\main\resources
 
     public QdpxToTeiConvertor(String jar, String inPath, String outPath) {
         this.jarPath = jar;
@@ -100,34 +95,30 @@ public class QdpxToTeiConvertor implements ConvertorInterface {
             // see https://www.baeldung.com/java-execute-jar-file
             Process process = null;
             try {
-                String jarFile = new File(Objects.requireNonNull(getClass().getClassLoader()
-                                .getResource(this.jarPath))
-                        .toURI()).getAbsolutePath();
+                File appDir = new File(System.getProperty("user.dir"));
+                File libDir = new File(appDir, "lib");
 
-                // JAR must be stored in two places:
-                // C:\Users\Schwarz\Documents\Git\TEIWorLD\teiworld\target\classes and
-                // C:\Users\Schwarz\Documents\Git\TEIWorLD\teiworld\src\main\resources
-                String jarFileCommonsIO = new File(Objects.requireNonNull(getClass().getClassLoader()
-                                .getResource("commons-io-2.19.0.jar"))
-                        .toURI()).getAbsolutePath();
+                File teicorpoJar = new File(libDir, "teicorpo.jar");
+                File commonsIoJar = new File(libDir, "commons-io-2.19.0.jar");
 
-                // Command: java -cp teicorpo.jar;commons-io-2.19.0.jar fr.ortolang.teicorpo.TeiCorpo -from text inputfile.txt -o "path/output/directory/"
-                // command needs to be passed to process as a String array:
-                // { "java",
-                //   "-cp",
-                //   "C:\Users\Schwarz\Documents\Git\TEIWorLD\teiworld\target\classes\teicorpo.jar;C:\Users\Schwarz\Documents\Git\TEIWorLD\teiworld\target\classes\commons-io-2.19.0.jar",
-                //   "fr.ortolang.teicorpo.TeiCorpo",
-                //   "-from",
-                //   "text",
-                //   "C:\Users\Schwarz\AppData\Local\Temp\3wCno_4b_In.qdpx\sources\9F718AB7-6D95-411D-8A76-8B22FAC42672.txt",
-                //   "-o",
-                //   "C:\Users\Schwarz\Documents\Git\TEIWorLD\tmpoutput\" };
-                String[] command = { "java", "-cp", jarFile.toString() + File.pathSeparator + jarFileCommonsIO.toString(),
-                        "fr.ortolang.teicorpo.TeiCorpo", "-from", "text", finalTxtFileNoEmptyLines.toString(), "-o", this.outputFilePath };
+                String classpath = teicorpoJar.getAbsolutePath()
+                        + File.pathSeparator
+                        + commonsIoJar.getAbsolutePath();
+
+                String[] command = {
+                        "java",
+                        "-cp",
+                        classpath,
+                        "fr.ortolang.teicorpo.TeiCorpo",
+                        "-from",
+                        "text",
+                        finalTxtFileNoEmptyLines.toString(),
+                        "-o",
+                        this.outputFilePath
+                };
 
                 ProcessBuilder processBuilder = new ProcessBuilder(command);
                 processBuilder.redirectErrorStream(true);
-
                 process = processBuilder.start();  // Start process
 
                 // Output the executed conversion to command line for informing the user (could be omitted)
@@ -138,8 +129,6 @@ public class QdpxToTeiConvertor implements ConvertorInterface {
                     System.err.println("Error handling process: " + e.getMessage());
                 }
 
-            } catch (URISyntaxException e) {
-                System.err.println("Error with URI syntax of jar files: " + e.getMessage());
             } catch (IOException e) {
                 System.err.println("Error starting process: " + e.getMessage());
             } finally {

@@ -52,14 +52,14 @@ public class TeiWorld {
         boolean inputExists = false;
         boolean outputExists = false;
 
-        if (CliArguments[0].equalsIgnoreCase("h") || CliArguments[0].equalsIgnoreCase("-h")
+        if (CliArguments.length == 0 || CliArguments[0].equalsIgnoreCase("h") || CliArguments[0].equalsIgnoreCase("-h")
                 || CliArguments[0].equalsIgnoreCase("--h") || CliArguments[0].equalsIgnoreCase("help")
                 || CliArguments[0].equalsIgnoreCase("-help") || CliArguments[0].equalsIgnoreCase("--help")) {
-            System.out.println("usage: java -jar de.ids.TeiWorld.jar [<mode>] [<path to input directory>] [<path to output directory>]");
-            System.out.println("   mode     'spoken' - converts to TEIspoken and keeps files separate if there is more than one in the input directory");
-            System.out.println("            'written' - converts to TEI I5 and combines files to a single corpus in case there is more than one in the input directory. The file metadata.json needs to be in the same directory, containing the keys \"CorpusSigle\" and \"DocumentSigle\", both with non-empty values");
-            System.out.println("            'writtenP5' - converts to TEI P5 and keeps files separate if there is more than one in the input directory");
-            System.out.println("            'writtenHierarchical' - converts to TEI I5 and constructs the hierarchical document and text structure of a written corpus. The directory needs to contain the file metadata.json (with the key \"CorpusSigle\" and its non-empty value) and one or more subdirectories (= idsDoc) that contain the individual texts (= idsText).");
+            System.out.println("usage: java -jar java -jar teiworld-1.0-SNAPSHOT.jar [<mode>] [<path to input directory>] [<path to output directory>]");
+            System.out.println("   mode     spoken - converts to TEIspoken and keeps files separate if there is more than one in the input directory");
+            System.out.println("            written - converts to TEI I5 and combines files to a single corpus in case there is more than one in the input directory. The file metadata.json needs to be in the same directory, containing the keys \"CorpusSigle\" and \"DocumentSigle\", both with non-empty values");
+            System.out.println("            writtenP5 - converts to TEI P5 and keeps files separate if there is more than one in the input directory");
+            System.out.println("            writtenHierarchical - converts to TEI I5 and constructs the hierarchical document and text structure of a written corpus. The directory needs to contain the file metadata.json (with the key \"CorpusSigle\" and its non-empty value) and one or more subdirectories (= idsDoc) that contain the individual texts (= idsText).");
             System.exit(0);
         }
 
@@ -174,34 +174,21 @@ public class TeiWorld {
     }
 
 
-    // For running main class with CLI args: right click on de.ids.TeiWorld.java > More Run/Debug > Modify Run Configuration
     public static void main(String[] args) {
 
         // check if CLI args are correct and complete - if not: exit program
         boolean correctArgs = checkArgs(args);
         if (!correctArgs) {
-            System.out.print("Error with command line arguments! You entered: java -jar de.ids.TeiWorld.jar ");
+            System.out.print("Error with command line arguments! You entered: java -jar teiworld-jarfile.jar ");
             for (int i = 0; i < args.length; i++){
                 System.out.print(args[i] + " ");
             }
-            System.out.println("\nRestart the tool with the correct args: java -jar de.ids.TeiWorld.jar [\"spoken\" or \"written\" or \"writtenP5\" or \"writtenHierarchical\"] " +
-                    "[existing input directory path] [existing output directory path] \nFind help with: java -jar de.ids.TeiWorld.jar -h for help.");
+            System.out.println("\nRestart the tool with the correct args: java -jar teiworld-jarfile.jar [\"spoken\" or \"written\" or \"writtenP5\" or \"writtenHierarchical\"] " +
+                    "[existing input directory path] [existing output directory path] \nFor help use: java -jar teiworld-jarfile.jar -h");
             System.exit(0);
         }
 
         TeiWorld teiwrld = new TeiWorld(args[0], args[1], args[2]);
-
-        /*
-        System.out.println("teiwrld mode: " + teiwrld.getMode());
-        System.out.println("teiwrld input dir: " + teiwrld.getInputDir());
-        System.out.println("teiwrld output dir: " + teiwrld.getOutputDir());
-        System.out.println("------");
-        System.out.println("Allowed file formats for spoken: " + Arrays.toString(teiwrld.SPOKENFORMATS));
-        System.out.println("Allowed file formats for written: " + Arrays.toString(teiwrld.WRITTENFORMATS));
-        System.out.println("Mimetype mapping:");
-        teiwrld.FORMATMIMETYPES.forEach((key, value) -> System.out.println(key + ": " + value));
-        System.out.println("------");
-        */
 
         // Check if a file "metadata.json" is present in the input file directory
         if (teiwrld.mode.equalsIgnoreCase("written") || teiwrld.mode.equalsIgnoreCase("writtenHierarchical")) {
@@ -209,7 +196,7 @@ public class TeiWorld {
             if (!metadataFile.exists()) {
                 System.out.println("No file metadata.json found. When using the command 'written' or 'writtenHierarchical' the file " +
                         "metadata.json is mandatory and needs to be present in the input directory path.\n" +
-                        "See also the help menu java -jar de.ids.TeiWorld.jar -h");
+                        "See also the help menu: java -jar teiworld-jarfile.jar -h");
                 System.exit(0);
             } else {
                 try {
@@ -223,7 +210,7 @@ public class TeiWorld {
                     if (teiwrld.mode.equalsIgnoreCase("writtenHierarchical")){
                         if (!jsonObject.containsKey("CorpusSigle") || jsonObject.get("CorpusSigle").toString().length() == 0){
                             System.out.println("For the mode writtenHierarchical the file metadata.json needs to contain the key CorpusSigle with a non-empty value.\n" +
-                                    "See also the help menu java -jar de.ids.TeiWorld.jar -h");
+                                    "See also the help menu: java -jar teiworld-jarfile.jar -h");
                             System.exit(0);
                         }
                     }
@@ -233,7 +220,7 @@ public class TeiWorld {
                         if ((!jsonObject.containsKey("CorpusSigle") || jsonObject.get("CorpusSigle").toString().length() == 0) ||
                                 (!jsonObject.containsKey("DocumentSigle") || jsonObject.get("DocumentSigle").toString().length() == 0)){
                             System.out.println("For the mode written the file metadata.json needs to contain the keys CorpusSigle and DocumentSigle both with non-empty values.\n" +
-                                    "See also the help menu java -jar de.ids.TeiWorld.jar -h");
+                                    "See also the help menu: java -jar teiworld-jarfile.jar -h");
                             System.exit(0);
                         }
                     }
@@ -318,6 +305,11 @@ public class TeiWorld {
                     DocxToTeiConvertor docxToTeiConvertor = new DocxToTeiConvertor(in, teiwrld.getOutputDir());
                     docxToTeiConvertor.convert();
                 }
+            }
+
+            // if the mode is writtenP5 inform user when transformation is finished
+            if (teiwrld.mode.equalsIgnoreCase("writtenP5")) {
+                System.out.println("... Transformation completed and stored in directory: " + teiwrld.getOutputDir());
             }
 
             // if the mode is written call the code p52i5 to create a single written I5 file (IDS corpus) from the individually converted files
