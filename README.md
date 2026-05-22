@@ -148,7 +148,25 @@ path\to\input\dir\
 	</idsDoc>
 </idsCorpus>
 ```
-
+#### Example **metadata.json**:<br>
+```
+{
+  "Creator": "Max Mustermann",
+  "Title": "Kafka Textsammlung",
+  "Publisher": "",
+  "PublisherYear": "2026",
+  "ResourceType": "Text",
+  "Subject": "Literatur",
+  "Contributor": "",
+  "Date": "04.02.2026",
+  "Language": "Deutsch",
+  "Size": "",
+  "Rights": "CC BY 4.0",
+  "Description": "Eine Sammlung an Texten geschrieben von Kafka, die über Projekt Gutenberg gescrapt wurden.",
+  "Geolocation": "Mannheim",
+  "FundingsReference": ""
+}
+```
 
 ### Components
 [TEIGarage](https://github.com/TEIC/TEIGarage)<br>
@@ -157,6 +175,7 @@ P5ToI5<br>
 
 
 ## Publications
+Ecker, J. (2026). Standardising language data through the conversion pipeline TEIWorLD. Online-Only Publikationen Des Leibniz-Instituts für Deutsche Sprache, 15. https://doi.org/10.21248/idsopen.15.2026.54
 
 ## Contact
 * [E-Mail](mailto:data-steward@ids-mannheim.de)
