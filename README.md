@@ -151,6 +151,8 @@ path\to\input\dir\
 #### Example **metadata.json**:<br>
 ```
 {
+  "CorpusSigle": "KT26",
+  "DocumentSigle": "MM",
   "Creator": "Max Mustermann",
   "Title": "Kafka Textsammlung",
   "Publisher": "",
